@@ -7,16 +7,16 @@ using System.Data.SqlClient;
 
 namespace DAL
 {
-    class CustomersDB
+    class CourierDB
     {
         private IConfiguration Configuration { get; }
-        public CustomersDB(IConfiguration configuration)
+        public CourierDB(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-        public Customer GetUser(string email, string password)
+        public Courier GetUser(string email, string password)
         {
-            Customer customer = null;
+            Courier courier = null;
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -35,27 +35,27 @@ namespace DAL
                     {
                         if (dr.Read())
                         {
-                            customer = new AspNetUser();
+                            courier = new Courier();
 
-                            customer.Id = (String)dr["Id"];
+                            courier.Id = (String)dr["Id"];
 
                             if (dr["FirstName"] != null)
-                                customer.FirstName = (string)dr["FirstName"];
+                                courier.FirstName = (string)dr["FirstName"];
 
                             if (dr["LastName"] != null)
-                                customer.LastName = (string)dr["LastName"];
+                                courier.LastName = (string)dr["LastName"];
 
                             if (dr["Email"] != null)
-                                customer.LastName = (string)dr["LastName"];
+                                courier.LastName = (string)dr["LastName"];
 
                             if (dr["Street"] != null)
-                                customer.LastName = (string)dr["LastName"];
+                                courier.LastName = (string)dr["LastName"];
 
                             if (dr["StreetNumber"] != null)
-                                customer.LastName = (string)dr["LastName"];
+                                courier.LastName = (string)dr["LastName"];
 
                             if (dr["PhoneNumber"] != null)
-                                customer.LastName = (string)dr["LastName"];
+                                courier.LastName = (string)dr["LastName"];
 
                         }
                     }
@@ -66,13 +66,7 @@ namespace DAL
                 throw e;
             }
 
-            return customer;
+            return courier;
         }
-
-
-
-
     }
-}
-
 }

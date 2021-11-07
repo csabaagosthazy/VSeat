@@ -4,11 +4,9 @@ using System.Text;
 
 namespace DTO
 {
-    public class Courier:AspNetUser
+    public class Customer : AspNetUser
     {
-        public int CourierId { get; set; }
+        public int CustomerId { get; set; }
         public string LoginId { get; set; }
-        public int WorkingCityId { get; set; }
-
     }
 }
