@@ -6,6 +6,11 @@ namespace DAL
 {
     public interface IRestaurantRestaurantCategoryDB
     {
-        RestaurantRestaurantCategory GetCathegoryByRestaurantId(int restaurantId);
+        List<RestaurantRestaurantCategory> GetRestaurantRestaurantCategories();
+        RestaurantRestaurantCategory GetCategoryByRestaurantId(int restaurantId);
+
+        int AddRestaurantRestaurantCategory(RestaurantRestaurantCategory rrc);
+        int UpdateRestaurantRestaurantCategory(RestaurantRestaurantCategory rrc);
+        int DeleteRestaurantRestaurantCategory(int restaurantId, int categoryId);
     }
 }

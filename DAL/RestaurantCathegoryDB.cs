@@ -5,28 +5,30 @@ using System.Data;
 using System.Data.SqlClient;
 namespace DAL
 {
-    class RestaurantCathegoryDB : IRestaurantCathegoryDB
+    class RestaurantCategoryDB : IRestaurantCategoryDB
     {
         private IConfiguration Configuration { get; }
 
-        public RestaurantCathegoryDB(IConfiguration configuration)
+        public RestaurantCategoryDB(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public RestaurantCathegory GetRestaurantCathegory(int id)
+        public List<RestaurantCategory> GetRestaurantCategories()
         {
-            RestaurantCathegory restaurantCathegory = null;
+            List<RestaurantCategory> results = null;
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             try
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select from RestaurantCathegories where id = @id";
+                    if (results == null)
+                        results = new List<RestaurantCategory>();
+
+                    string query = "Select from RestaurantCategories";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@id", id);
 
                     cn.Open();
 
@@ -35,14 +37,14 @@ namespace DAL
                         while (dr.Read())
                         {
 
-                            restaurantCathegory = new RestaurantCathegory();
+                            RestaurantCategory rc = new RestaurantCategory();
 
-                            restaurantCathegory.CathegoryID = (int)dr["CathegoryID"];
+                            rc.CategoryID = (int)dr["CategoryID"];
 
-                            if (dr["name"] != null)
-                                restaurantCathegory.name = (string)dr["name"];
+                            if (dr["Name"] != null)
+                                rc.Name = (string)dr["Name"];
 
-                           
+                            results.Add(rc);
 
                         }
                     }
@@ -53,7 +55,139 @@ namespace DAL
                 throw e;
             }
 
-            return restaurantCathegory;
+            return results;
+        }
+        public RestaurantCategory GetRestaurantCategoryById(int cathegoryId)
+        {
+            RestaurantCategory rc = null;
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+                    string query = "Select from RestaurantCategories where CathegoryId = @CategoryId";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@CategoryId", cathegoryId);
+
+                    cn.Open();
+
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+
+
+
+                            rc.CategoryID = (int)dr["CathegoryID"];
+
+                            if (dr["name"] != null)
+                                rc.Name = (string)dr["Name"];
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return rc;
+        }
+
+        public int AddRestaurantCategory(RestaurantCategory rc)
+        {
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            int result = 0;
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+                    string query = "Insert RestaurantCategories (Name) values (@Name)";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Name", rc.Name);
+
+
+
+
+                    cn.Open();
+                    result = cmd.ExecuteNonQuery();
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
+
+        }
+
+        public int UpdateRestaurantCategory(RestaurantCategory rc)
+        {
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            int result = 0;
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+
+                    string query = "Update RestaurantCategories SET Name = @Name where CathegoryId = @CathegoryId";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@CategoryId", rc.CategoryID);
+                    cmd.Parameters.AddWithValue("@Name", rc.Name);
+
+
+
+                    cn.Open();
+                    result = cmd.ExecuteNonQuery();
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
+        }
+        public int DeleteRestaurantCategory(int cathegoryId)
+        {
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            int result = 0;
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+
+                    string query = "DELETE FROM RestaurantCategories where CategoryId = @CategoryId";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@CategoryId", cathegoryId);
+
+
+                    cn.Open();
+                    result = cmd.ExecuteNonQuery();
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
         }
     }
 }

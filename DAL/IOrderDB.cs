@@ -8,9 +8,9 @@ namespace DAL
     {
         List<Order> GetOrders();
         Order GetOrderById(int id);
-        void AddOrder(Order order);
-        void UpdateOrder(int id, Order order);
-        void DeleteOrder(int id);
+        int AddOrder(Order order);
+        int UpdateOrder(Order order);
+        int DeleteOrder(int id);
 
     }
 }

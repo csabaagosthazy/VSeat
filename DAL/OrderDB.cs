@@ -24,7 +24,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select * from Dishes";
+                    string query = "Select * from Orders";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -87,7 +87,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select from Dishes where id = @id";
+                    string query = "Select from Orders where id = @id";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", id);
@@ -139,10 +139,11 @@ namespace DAL
             return order;
         }
 
-        public void AddOrder(Order order)
+        public int AddOrder(Order order)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
+            int result = 0;
             try
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
@@ -163,7 +164,7 @@ namespace DAL
 
 
                     cn.Open();
-                    cmd.ExecuteNonQuery();
+                    result = cmd.ExecuteNonQuery();
                     cn.Close();
                 }
 
@@ -173,22 +174,23 @@ namespace DAL
             {
                 throw e;
             }
+            return result;
 
         }
 
-        public void UpdateOrder(int id, Order order)
+        public int UpdateOrder(Order order)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-
+            int result = 0;
             try
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
                     
-                    string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, DeliveryAddressId = @DeliveryAddressId,  CustomerId = @CustomerId, CourierId = @CourierId where @id = id";
+                    string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, DeliveryAddressId = @DeliveryAddressId,  CustomerId = @CustomerId, CourierId = @CourierId where OrderId = @OrderId";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@OrderId", order.OrderId);
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
                     cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", order.ScheduledDeliveryDate);
@@ -202,8 +204,8 @@ namespace DAL
 
 
                     cn.Open();
-                    cmd.ExecuteNonQuery();
-                    cn.Close();
+                    result = cmd.ExecuteNonQuery();
+                  
                 }
 
 
@@ -212,11 +214,13 @@ namespace DAL
             {
                 throw e;
             }
+            return result;
         }
-        public void DeleteOrder(int id)
+        public int DeleteOrder(int id)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
+            int result = 0;
             try
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
@@ -229,8 +233,8 @@ namespace DAL
 
 
                     cn.Open();
-                    cmd.ExecuteNonQuery();
-                    cn.Close();
+                    result = cmd.ExecuteNonQuery();
+                
                 }
 
 
@@ -239,6 +243,7 @@ namespace DAL
             {
                 throw e;
             }
+            return result;
         }
     }
   
