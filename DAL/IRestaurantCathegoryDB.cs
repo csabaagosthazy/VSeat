@@ -4,7 +4,8 @@ using System.Text;
 
 namespace DAL
 {
-    class DishesDB
+    public interface IRestaurantCathegoryDB
     {
+        RestaurantCathegory GetRestaurantCathegory(int id);
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DAL
 {
-    public class Dishes
+    public class Dish
     {
         public int DishId { get; set; }
         public string Name { get; set; }

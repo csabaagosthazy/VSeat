@@ -4,7 +4,8 @@ using System.Text;
 
 namespace DAL
 {
-    public interface IRestaurantCathegoriesDB
+    public interface IDishDB
     {
+        List<Dish> GetDishesByResturantId(int RestaurantId);
     }
 }

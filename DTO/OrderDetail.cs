@@ -1,6 +1,6 @@
 ﻿namespace DAL
 {
-    public class OrderDetails
+    public class OrderDetail
     {
         public int OrderDetailId { get; set; }
         public float UnitPrice { get; set; }
