@@ -95,7 +95,10 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@CityId", customer.CityId);
 
                     cn.Open();
+
+           
                 }
+               
             }
             catch (Exception e)
             {
@@ -107,9 +110,9 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert into Customer(LoginId) values(); SELECT SCOPE_IDENTITY()";
+                    string query = "Insert into Customer(LoginId) values(@LoginId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    
+
                     cmd.Parameters.AddWithValue("@LoginId", customer.Id);
 
                     customer.CustomerId = Convert.ToInt32(cmd.ExecuteScalar());

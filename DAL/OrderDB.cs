@@ -8,7 +8,7 @@ using System.Data;
 
 namespace DAL
 {
-    class OrderDB
+    public class OrderDB : IOrderDB
     {
         private IConfiguration Configuration { get; }
         public OrderDB(IConfiguration configuration)
@@ -19,16 +19,17 @@ namespace DAL
         public Order CreateOrder(Order order)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-           
+
             try
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert into AspNetUsers(OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice,CashPayment, IsPaid, IsCancel, CustomerId, CourierId) values(@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel @CustomerId, @CourierId); SELECT SCOPE_IDENTITY()";
+                    string query = "Insert into Orders(OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice,CashPayment, IsPaid, IsCancel, CustomerId, CourierId) values(@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @CustomerId, @CourierId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
+                    
                     order.OrderId = Convert.ToInt32(cmd.ExecuteScalar());
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderId);
-                    cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
+                    cmd.Parameters.AddWithValue("@OrderDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", order.ScheduledDeliveryDate);
                     cmd.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
                     cmd.Parameters.AddWithValue("@CashPayment", order.CashPayment);
@@ -36,9 +37,11 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel);
                     cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
                     cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
-                        
 
                     cn.Open();
+
+
+
                 }
             }
             catch (Exception e)

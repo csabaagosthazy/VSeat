@@ -8,15 +8,16 @@ using System.Data;
 
 namespace DAL
 {
-    class OrderDetailDB
+    public class OrderDetailDB : IOrderDetailDB
     {
         private IConfiguration Configuration { get; }
         public OrderDetailDB(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-        ///Create customer
-        public OrderDetail CreateOrderDetail(OrderDetail orderDetail)
+       
+
+        public OrderDetail InsertOrderDetail(int orderId, OrderDetail orderDetail)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -24,13 +25,13 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert into AspNetUsers(UnitPrice, Quantity, Discount, OrderId, DishId) values(@UnitPrice, @Quantity, @Discount, @OrderId, @DishId); SELECT SCOPE_IDENTITY()";
+                    string query = "Insert into OrderDetails(UnitPrice, Quantity, Discount, OrderId, DishId) values(@UnitPrice, @Quantity, @Discount, @OrderId, @DishId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     orderDetail.OrderDetailId = Convert.ToInt32(cmd.ExecuteScalar());
                     cmd.Parameters.AddWithValue("@UnitPrice", orderDetail.UnitPrice);
                     cmd.Parameters.AddWithValue("@Quantity", orderDetail.Quantity);
                     cmd.Parameters.AddWithValue("@Discount", orderDetail.Discount);
-                    cmd.Parameters.AddWithValue("@OrderId", orderDetail.OrderId);
+                    cmd.Parameters.AddWithValue("@OrderId", orderId);
                     cmd.Parameters.AddWithValue("@DishId", orderDetail.DishId);
 
                     cn.Open();
@@ -43,5 +44,6 @@ namespace DAL
 
             return orderDetail;
         }
+
     }
 }

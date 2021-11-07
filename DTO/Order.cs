@@ -13,8 +13,8 @@ namespace DTO
         public DateTime? EffectiveDeliveryDate { get; set; }
         public decimal TotalPrice { get; set; }
         public bool CashPayment { get; set; }
-        public bool IsPaid { get; set; }
-        public bool IsCancel { get; set; }
+        public bool IsPaid { get; set; } = false;
+        public bool IsCancel { get; set; } = false;
         public int CustomerId { get; set; }
         public int CourierId { get; set; }
     }
