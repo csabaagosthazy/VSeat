@@ -8,7 +8,7 @@ using System.Data;
 
 namespace DAL
 {
-    class CustomerDB
+    public class CustomerDB : ICustomerDB
     {
         private IConfiguration Configuration { get; }
         public CustomerDB(IConfiguration configuration)

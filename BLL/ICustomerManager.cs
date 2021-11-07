@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using DTO;
+using System.Text;
 
-namespace DAL
+namespace BLL
 {
-    public interface ICustomerDB
+    interface ICustomerManager
     {
         Customer CreateCustomer(Customer customer);
         Customer GetUser(string email, string password);
+   
     }
-    
 }

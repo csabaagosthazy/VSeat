@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace DAL
 {
-    class CourierDB
+    public class CourierDB : ICourierDB
     {
         private IConfiguration Configuration { get; }
         public CourierDB(IConfiguration configuration)
@@ -68,5 +68,6 @@ namespace DAL
 
             return courier;
         }
+
     }
 }

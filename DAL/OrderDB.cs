@@ -16,7 +16,7 @@ namespace DAL
             Configuration = configuration;
         }
         ///Create customer
-        public Order CreateCustomer(Order order)
+        public Order CreateOrder(Order order)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
            

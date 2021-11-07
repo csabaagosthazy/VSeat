@@ -5,8 +5,8 @@ using DTO;
 
 namespace DAL
 {
-    interface ICourierDB : IAspNetUserDB
+    public interface ICourierDB
     {
-       
+        public Courier GetUser(string email, string password);
     }
 }
