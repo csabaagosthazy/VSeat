@@ -1,6 +1,6 @@
 using System;
 
-namespace VSEatMVC.Models
+namespace VsEatMVC.Models
 {
     public class ErrorViewModel
     {

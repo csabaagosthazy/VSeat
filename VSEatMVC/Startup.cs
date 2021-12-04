@@ -1,3 +1,4 @@
+using BLL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VSEatMVC
+namespace VsEatMVC
 {
     public class Startup
     {
@@ -23,6 +24,7 @@ namespace VSEatMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddScoped<ICourierManager, CourierManager>();
             services.AddControllersWithViews();
         }
 
@@ -50,7 +52,19 @@ namespace VSEatMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Home}/{id?}");
+                endpoints.MapControllerRoute(
+                    name:"admin",
+                    pattern: "{controller=Admin}/{action=Admin}/{id?}"
+                    );
+                endpoints.MapControllerRoute(
+                  name: "client",
+                  pattern: "{controller=Client}/{action=Client}/{id?}"
+                  );
+                endpoints.MapControllerRoute(
+                name: "courier",
+                pattern: "{controller=Courier}/{action=Courier}/{id?}"
+                );
             });
         }
     }

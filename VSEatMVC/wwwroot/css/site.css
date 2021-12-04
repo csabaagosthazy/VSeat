@@ -69,3 +69,50 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.page-header {
+    background-color: #666;
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+}
+
+.page-section {
+    content: "";
+    display: table;
+    clear: both;
+    width: 100%;
+    height: 100%;
+}
+.sidenav {
+    float: left;
+    width: 20%;
+    height: 400px;
+    background: #ccc;
+    padding: 20px;
+}
+
+.sidenav ul {
+     list-style-type: none;
+     padding: 0;
+}
+
+.sidenav a:hover {
+   color: #f1f1f1;
+}
+
+.page {
+    float: left;
+    padding: 20px;
+    width: 80%;
+    height: 400px;
+    background-color: #f1f1f1;
+}
+
+@media (max-width: 600px) {
+    .sidenav, .page {
+        width: 100%;
+        height: auto;
+    }
+}
