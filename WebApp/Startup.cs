@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VsEatMVC
+namespace WebApp
 {
     public class Startup
     {
@@ -54,7 +54,7 @@ namespace VsEatMVC
                     name: "default",
                     pattern: "{controller=Home}/{action=Home}/{id?}");
                 endpoints.MapControllerRoute(
-                    name:"admin",
+                    name: "admin",
                     pattern: "{controller=Admin}/{action=Admin}/{id?}"
                     );
                 endpoints.MapControllerRoute(
