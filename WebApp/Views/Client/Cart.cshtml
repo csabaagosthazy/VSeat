@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebApp.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Client Page";
+}
+
+<div class="container-fluid h-100">
+    <header class="page-header">
+        <h2>My page</h2>
+    </header>
+    <section class="page-section">
+        <nav class="sidenav">
+            <ul>
+                <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="BrowseRestaurants">Browse restaurants</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="ModifyOrder">Manage orders</a></li>
+            </ul>
+        </nav>
+
+        <article class="page">
+            <h2>Cart</h2>
+            @if (Model != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Id
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td align="right" colspan="6">Total Price</td>
+                            <td>
+                                @ViewBag.total
+                            </td>
+                        </tr>
+                </table>
+                <div>
+                    @Html.ActionLink("Create order", "CreateOrder")
+                    <br />
+                    @Html.ActionLink("Back", "Client")
+                </div>
+            }
+            else
+            {
+                <table class="table">
+                    <tr>
+                        <td colspan="5" align="center">
+                            No items in your shopping cart
+                        </td>
+                    </tr>
+                </table>
+            }
+        </article>
+    </section>
+</div>

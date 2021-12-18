@@ -1,4 +1,5 @@
 using BLL;
+using DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,13 @@ namespace WebApp
         {
             //services.AddScoped<ICourierManager, CourierManager>();
             services.AddControllersWithViews();
+            services.AddScoped<IRestaurantManager, RestaurantManager>();
+            services.AddScoped<IRestaurantDB, RestaurantDB>();
+            services.AddScoped<IDishManager, DishManager>();
+            services.AddScoped<IDishDB, DishDB>();
+            services.AddSession(options =>{
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +53,7 @@ namespace WebApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

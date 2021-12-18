@@ -8,7 +8,7 @@ using System.Data;
 
 namespace DAL
 {
-    class RestaurantDB
+    public class RestaurantDB : IRestaurantDB
     {
 
         private IConfiguration Configuration { get; }
@@ -18,54 +18,88 @@ namespace DAL
         }
         public List<Restaurant> GetRestaurants()
         {
-            List<Restaurant> results = null;
+            List<Restaurant> results = new List<Restaurant>();
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            //mocks
+            var test1 = new Restaurant();
 
-            try
+            test1.RestaurantId = 1;
+
+
+            test1.Name = (string)"Test1";
+
+
+            test1.Phone = (string)"123456";
+
+
+            test1.Email = (string)"a@a.com";
+
+            test1.Street = (string)"Street1";
+
+            test1.StreetNumber = (string)"20";
+
+            test1.City = (string)"Sierre";
+
+            results.Add(test1);
+
+            var test2 = new Restaurant
             {
-                using (SqlConnection cn = new SqlConnection(connectionString))
-                {
-                    string query = "Select * from Restaurants";
-                    SqlCommand cmd = new SqlCommand(query, cn);
+                City = "Sierre",
+                Email = "a@a.com",
+                Name = "Test1",
+                Phone = "123456",
+                RestaurantId = 2,
+                Street = "Street2",
+                StreetNumber = "21"
+            };
 
-                    cn.Open();
+            results.Add(test2);
 
-                    using (SqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        while (dr.Read())
-                        {
-                            if (results == null)
-                                results = new List<Restaurant>();
+            //try
+            //{
+            //    using (SqlConnection cn = new SqlConnection(connectionString))
+            //    {
+            //        string query = "Select * from Restaurants";
+            //        SqlCommand cmd = new SqlCommand(query, cn);
 
-                            Restaurant restaurant = new Restaurant();
+            //        cn.Open();
 
-                            restaurant.RestaurantId = (int)dr["RestaurantId"];
+            //        using (SqlDataReader dr = cmd.ExecuteReader())
+            //        {
+            //            while (dr.Read())
+            //            {
+            //                if (results == null)
+            //                    results = new List<Restaurant>();
 
-                            if (dr["Name"] != null)
-                                restaurant.Name = (string)dr["Name"];
+            //                Restaurant restaurant = new Restaurant();
 
-                            if (dr["Phone"] != null)
-                                restaurant.Phone = (string)dr["Phone"];
+            //                restaurant.RestaurantId = (int)dr["RestaurantId"];
+
+            //                if (dr["Name"] != null)
+            //                    restaurant.Name = (string)dr["Name"];
+
+            //                if (dr["Phone"] != null)
+            //                    restaurant.Phone = (string)dr["Phone"];
 
 
-                            restaurant.Email = (string)dr["Email"];
+            //                restaurant.Email = (string)dr["Email"];
 
-                            restaurant.Street = (string)dr["Street"];
+            //                restaurant.Street = (string)dr["Street"];
 
-                            restaurant.StreetNumber = (string)dr["StreetNumber"];
+            //                restaurant.StreetNumber = (string)dr["StreetNumber"];
 
-                            restaurant.CityId = (int)dr["CityId"];
+            //                restaurant.City = (string)dr["City"];
 
-                            results.Add(restaurant);
-                        }
-                    }
-                }
+            //                results.Add(restaurant);
+            //            }
+            //        }
+            //    }
             
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    throw e;
+            //}
 
             return results;
         }
@@ -107,7 +141,7 @@ namespace DAL
                             if (dr["Street"] != null)
                                 restaurant.Street = (string)dr["Street"];
                             if (dr["City"] != null)
-                                restaurant.CityId = (int)dr["CityId"];
+                                restaurant.City = (string)dr["City"];
                            
 
 
@@ -140,7 +174,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Email", restaurant.Email);
                     cmd.Parameters.AddWithValue("@StreetNumber", restaurant.StreetNumber);
                     cmd.Parameters.AddWithValue("@Street", restaurant.Street);
-                    cmd.Parameters.AddWithValue("@CityId", restaurant.CityId);             
+                    cmd.Parameters.AddWithValue("@City", restaurant.City);             
 
                     cn.Open();
                     result = cmd.ExecuteNonQuery();
@@ -174,7 +208,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Email", restaurant.Email);
                     cmd.Parameters.AddWithValue("@StreetNo", restaurant.StreetNumber);
                     cmd.Parameters.AddWithValue("@Street", restaurant.Street);
-                    cmd.Parameters.AddWithValue("@CityId", restaurant.CityId);                    
+                    cmd.Parameters.AddWithValue("@City", restaurant.City);                    
 
 
                     cn.Open();

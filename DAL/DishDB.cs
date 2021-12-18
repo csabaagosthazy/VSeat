@@ -8,7 +8,7 @@ using DTO;
 
 namespace DAL
 {
-    class DishDB : IDishDB
+    public class DishDB : IDishDB
     {
         private IConfiguration Configuration { get; }
 

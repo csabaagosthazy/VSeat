@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Client Page";
 }
 
@@ -10,16 +9,18 @@
     <section class="page-section">
         <nav class="sidenav">
             <ul>
+                <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
                 <li><a asp-area="" asp-controller="Client" asp-action="BrowseRestaurants">Browse restaurants</a></li>
-                <li><a asp-area="" asp-controller="Client" asp-action="ModifyOrder">Manage orders</a></li>
-                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Shopping cart</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Cart</a></li>
             </ul>
         </nav>
 
         <article class="page">
-            <h2>Welcome --username--</h2>
-            <p>Here you can create new orders or modify ongoing orders</p>
-           
+            <h1>Create order</h1>
+
+            <div>
+                @Html.ActionLink("Back", "Cart")
+            </div>
         </article>
     </section>
 </div>
