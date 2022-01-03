@@ -20,5 +20,10 @@ namespace BLL
 
             return RestaurantDB.GetRestaurants();
         }
+
+        public Restaurant GetRestaurantById(int id)
+        {
+            return RestaurantDB.GetRestaurantById(id);
+        }
     }
 }

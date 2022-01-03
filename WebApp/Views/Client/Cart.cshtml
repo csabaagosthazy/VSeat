@@ -24,9 +24,6 @@
                     <thead>
                         <tr>
                             <th>
-                                Id
-                            </th>
-                            <th>
                                 Name
                             </th>
                             <th>
@@ -40,20 +37,20 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ItemId)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ItemName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ItemName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "RemoveCartItem", new { cartItemId = item.ItemId })
+                            </td>
+                        </tr>
                         }
                         <tr>
                             <td align="right" colspan="6">Total Price</td>
@@ -77,6 +74,10 @@
                         </td>
                     </tr>
                 </table>
+                <div>
+                    <br />
+                    @Html.ActionLink("Back", "Client")
+                </div>
             }
         </article>
     </section>

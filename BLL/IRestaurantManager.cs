@@ -8,5 +8,6 @@ namespace BLL
     public interface IRestaurantManager
     {
         List<Restaurant> GetRestaurants();
+        Restaurant GetRestaurantById(int id);
     }
 }

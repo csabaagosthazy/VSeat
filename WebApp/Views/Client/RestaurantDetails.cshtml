@@ -1,0 +1,54 @@
+﻿@model DTO.Restaurant
+@{
+    ViewData["Title"] = "Client Page";
+}
+
+<div class="container-fluid h-100">
+    <header class="page-header">
+        <h2>My page</h2>
+    </header>
+    <section class="page-section">
+        <nav class="sidenav">
+            <ul>
+                <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="ModifyOrder">Manage orders</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Cart</a></li>
+            </ul>
+        </nav>
+
+        <article class="page">
+            <h1>Restaurant details</h1>
+            <hr />
+            <div>
+                <strong> @Html.DisplayNameFor(Model => Model.Name): </strong>
+                @Html.DisplayFor(Model => Model.Name)
+                <br />
+                <strong>@Html.DisplayNameFor(Model => Model.Phone): </strong>
+                @Html.DisplayFor(Model => Model.Phone)
+                <br />
+                <strong>@Html.DisplayNameFor(Model => Model.Email): </strong>
+                @Html.DisplayFor(Model => Model.Email)
+                <br />
+                <strong>@Html.DisplayNameFor(Model => Model.City): </strong>
+                @Html.DisplayFor(Model => Model.City)
+                <br />
+                <strong>@Html.DisplayNameFor(Model => Model.Street): </strong>
+                @Html.DisplayFor(Model => Model.Street)
+                <br />
+                <strong>@Html.DisplayNameFor(Model => Model.StreetNumber): </strong>
+                @Html.DisplayFor(Model => Model.StreetNumber)
+                <br />
+            </div>
+
+            <div>
+                @Html.ActionLink("Menu", "SelectDishes", new { id = Model.RestaurantId })
+                <br />
+                <a asp-action="BrowseRestaurants">Back</a>
+            </div>
+
+        </article>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

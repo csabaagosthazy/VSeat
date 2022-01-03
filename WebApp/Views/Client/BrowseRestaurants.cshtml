@@ -47,8 +47,8 @@
                                 @Html.DisplayFor(modelItem => item.City)
                             </td>
                             <td>
-                                @Html.ActionLink("Get dishes", "SelectDishes", new { id = item.RestaurantId }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.RestaurantId })
+                                @Html.ActionLink("Menu", "SelectDishes", new { id = item.RestaurantId }) |
+                                @Html.ActionLink("Details", "RestaurantDetails", new { id = item.RestaurantId })
                             </td>
                         </tr>
                     }
