@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Data
 {
-    public class WebAppContext : IdentityDbContext<IdentityUser>
+    public class WebAppContext : IdentityDbContext<AspNetUser>
     {
         public WebAppContext(DbContextOptions<WebAppContext> options)
             : base(options)

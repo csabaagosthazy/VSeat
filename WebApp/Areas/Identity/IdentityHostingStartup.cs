@@ -1,4 +1,5 @@
 ﻿using System;
+using DTO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -19,7 +20,7 @@ namespace WebApp.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("WebAppContextConnection")));
 
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<WebAppContext>();
             });
         }

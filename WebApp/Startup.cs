@@ -1,8 +1,11 @@
 using BLL;
+using DTO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Data;
 using WebApp.Services;
 
 
@@ -27,6 +31,16 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            // Add EF services to the services container.
+            services.AddDbContext<WebAppContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //services.AddIdentity<AspNetUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<WebAppContext>()
+            //    .AddDefaultTokenProviders();
+
+            services.AddMvc();
             //services.AddScoped<ICourierManager, CourierManager>();
             services.AddControllersWithViews();
 
@@ -36,6 +50,7 @@ namespace WebApp
             // using Microsoft.AspNetCore.Identity.UI.Services;
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+            
 
             services.AddRazorPages();
         }
@@ -59,6 +74,8 @@ namespace WebApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
