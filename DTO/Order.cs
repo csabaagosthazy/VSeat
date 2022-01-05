@@ -14,6 +14,7 @@ namespace DTO
         public bool IsPaid { get; set; } = false;
         public bool IsCancel { get; set; } = false;
         public int CustomerId { get; set; }
-        public int CourierId { get; set; }
+        public string CourierId { get; set; }
+        public int RestaurantId { get; set; }
     }
 }

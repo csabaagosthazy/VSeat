@@ -125,7 +125,7 @@ namespace DAL
             return dish;
         }
 
-        public int AddOrder(Dish dish)
+        public int AddDish(Dish dish)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -134,7 +134,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert Dishes (Name, Description, Price, IsActive, SpiceLevel, RestaurantId) values (@Name, @Description, @Price, @IsActive, @SpiceLevel, @RestaurantId)";
+                    string query = "Insert Into Dishes (Name, Description, Price, IsActive, SpiceLevel, RestaurantId) values (@Name, @Description, @Price, @IsActive, @SpiceLevel, @RestaurantId)";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Name", dish.Name);

@@ -20,78 +20,52 @@ namespace DAL
         {
             List<Restaurant> results = new List<Restaurant>();
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            //mocks
-            var test1 = new Restaurant
+
+            try
             {
-                RestaurantId = 1,
-                Name = (string)"Test1",
-                Phone = (string)"123456",
-                Email = (string)"a@a.com",
-                Street = (string)"Street1",
-                StreetNumber = (string)"20",
-                City = (string)"Sierre"
-            };
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+                    string query = "Select * from Restaurants";
+                    SqlCommand cmd = new SqlCommand(query, cn);
 
-            results.Add(test1);
+                    cn.Open();
 
-            var test2 = new Restaurant
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            if (results == null)
+                                results = new List<Restaurant>();
+
+                            Restaurant restaurant = new Restaurant();
+
+                            restaurant.RestaurantId = (int)dr["RestaurantId"];
+
+                            if (dr["Name"] != null)
+                                restaurant.Name = (string)dr["Name"];
+
+                            if (dr["Phone"] != null)
+                                restaurant.Phone = (string)dr["Phone"];
+
+                            if (dr["Email"] != null)
+                                restaurant.Email = (string)dr["Email"];
+
+                            restaurant.Street = (string)dr["Street"];
+
+                            restaurant.StreetNumber = (string)dr["StreetNumber"];
+
+                            restaurant.CityId = (int)dr["CityId"];
+
+                            results.Add(restaurant);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
             {
-                City = "Sierre",
-                Email = "a@a.com",
-                Name = "Test1",
-                Phone = "123456",
-                RestaurantId = 2,
-                Street = "Street2",
-                StreetNumber = "21"
-            };
-
-            results.Add(test2);
-
-            //try
-            //{
-            //    using (SqlConnection cn = new SqlConnection(connectionString))
-            //    {
-            //        string query = "Select * from Restaurants";
-            //        SqlCommand cmd = new SqlCommand(query, cn);
-
-            //        cn.Open();
-
-            //        using (SqlDataReader dr = cmd.ExecuteReader())
-            //        {
-            //            while (dr.Read())
-            //            {
-            //                if (results == null)
-            //                    results = new List<Restaurant>();
-
-            //                Restaurant restaurant = new Restaurant();
-
-            //                restaurant.RestaurantId = (int)dr["RestaurantId"];
-
-            //                if (dr["Name"] != null)
-            //                    restaurant.Name = (string)dr["Name"];
-
-            //                if (dr["Phone"] != null)
-            //                    restaurant.Phone = (string)dr["Phone"];
-
-
-            //                restaurant.Email = (string)dr["Email"];
-
-            //                restaurant.Street = (string)dr["Street"];
-
-            //                restaurant.StreetNumber = (string)dr["StreetNumber"];
-
-            //                restaurant.City = (string)dr["City"];
-
-            //                results.Add(restaurant);
-            //            }
-            //        }
-            //    }
-            
-            //}
-            //catch (Exception e)
-            //{
-            //    throw e;
-            //}
+                throw e;
+            }
 
             return results;
         }
@@ -100,80 +74,51 @@ namespace DAL
             Restaurant restaurant = null;
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            //mocks
-            var test1 = new Restaurant
+            try
             {
-                RestaurantId = 1,
-                Name = (string)"Test1",
-                Phone = (string)"123456",
-                Email = (string)"a@a.com",
-                Street = (string)"Street1",
-                StreetNumber = (string)"20",
-                City = (string)"Sierre"
-            };
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+                    string query = "Select * from Restaurants where id = @id";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id", id);
 
-            var test2 = new Restaurant
-            {
-                City = "Sierre",
-                Email = "a@a.com",
-                Name = "Test1",
-                Phone = "123456",
-                RestaurantId = 2,
-                Street = "Street2",
-                StreetNumber = "21"
-            };
+                    cn.Open();
 
-            if (id == 1) restaurant = test1;
-            else 
-            {
-                restaurant = test2;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+
+                            restaurant = new Restaurant();
+
+                            restaurant.RestaurantId = (int)dr["RestaurantId"];
+
+                            if (dr["Name"] != null)
+                                restaurant.Name = (string)dr["Name"];
+
+                            if (dr["Phone"] != null)
+                                restaurant.Phone = (string)dr["Phone"];
+
+                            if (dr["Email"] != null)
+                                restaurant.Email = (string)dr["Email"];
+                            if (dr["StreetNumber"] != null)
+                                restaurant.StreetNumber = (String)dr["StreetNumber"];
+                            if (dr["Street"] != null)
+                                restaurant.Street = (string)dr["Street"];
+                            if (dr["City"] != null)
+                                restaurant.CityId = (int)dr["CityId"];
+
+
+
+                        }
+                    }
+                }
             }
-
-            //try
-            //{
-            //    using (SqlConnection cn = new SqlConnection(connectionString))
-            //    {
-            //        string query = "Select * from Restaurants where id = @id";
-            //        SqlCommand cmd = new SqlCommand(query, cn);
-            //        cmd.CommandType = CommandType.StoredProcedure;
-            //        cmd.Parameters.AddWithValue("@id", id);
-
-                //        cn.Open();
-
-                //        using (SqlDataReader dr = cmd.ExecuteReader())
-                //        {
-                //            while (dr.Read())
-                //            {
-
-                //                restaurant = new Restaurant();
-
-                //                restaurant.RestaurantId = (int)dr["RestaurantId"];
-
-                //                if (dr["Name"] != null)
-                //                    restaurant.Name = (string)dr["Name"];
-
-                //                if (dr["Phone"] != null)
-                //                    restaurant.Phone = (string)dr["Phone"];
-
-                //                if (dr["Email"] != null)
-                //                    restaurant.Email = (string)dr["Email"];
-                //                if (dr["StreetNo"] != null)
-                //                    restaurant.StreetNumber = (String)dr["StreetNumber"];
-                //                if (dr["Street"] != null)
-                //                    restaurant.Street = (string)dr["Street"];
-                //                if (dr["City"] != null)
-                //                    restaurant.City = (string)dr["City"];
-
-
-
-                //            }
-                //        }
-                //    }
-                //}
-                //catch (Exception e)
-                //{
-                //    throw e;
-                //}
+            catch (Exception e)
+            {
+                throw e;
+            }
 
             return restaurant;
         }
@@ -187,7 +132,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert Restaurants (Name, Phone, Email, StreetNumber, Street, City,PostCode) values (@Name, @Phone, @Email, @StreetNumber, @Street, @CityId)";
+                    string query = "Insert Into Restaurants (Name, Phone, Email, CityId, Street, StreetNumber) values (@Name, @Phone, @Email, @StreetNumber, @Street, @CityId)";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Name", restaurant.Name);
@@ -195,7 +140,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Email", restaurant.Email);
                     cmd.Parameters.AddWithValue("@StreetNumber", restaurant.StreetNumber);
                     cmd.Parameters.AddWithValue("@Street", restaurant.Street);
-                    cmd.Parameters.AddWithValue("@City", restaurant.City);             
+                    cmd.Parameters.AddWithValue("@CityId", restaurant.CityId);             
 
                     cn.Open();
                     result = cmd.ExecuteNonQuery();
@@ -229,7 +174,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Email", restaurant.Email);
                     cmd.Parameters.AddWithValue("@StreetNo", restaurant.StreetNumber);
                     cmd.Parameters.AddWithValue("@Street", restaurant.Street);
-                    cmd.Parameters.AddWithValue("@City", restaurant.City);                    
+                    cmd.Parameters.AddWithValue("@CityId", restaurant.CityId);                    
 
 
                     cn.Open();

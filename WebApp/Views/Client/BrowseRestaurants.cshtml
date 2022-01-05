@@ -29,7 +29,7 @@
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.City)
+                            @Html.DisplayNameFor(model => model.CityId)
                         </th>
                     </tr>
                 </thead>
@@ -44,7 +44,7 @@
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.City)
+                                @Html.DisplayFor(modelItem => item.CityId)
                             </td>
                             <td>
                                 @Html.ActionLink("Menu", "SelectDishes", new { id = item.RestaurantId }) |

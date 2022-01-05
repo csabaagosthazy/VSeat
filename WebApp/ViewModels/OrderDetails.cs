@@ -14,6 +14,7 @@ namespace WebApp.ViewModels
         public bool CashPayment { get; set; }
         public bool IsPaid { get; set; } = false;
         public int CustomerId { get; set; }
+        public int RestaurantId { get; set; }
         public List<CartItem> OrderItems { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace BLL
 {
     public interface ICourierManager
     {
-        Courier GetUser(string email, string password);
+        Courier GetCourier(string email, string password);
+        Courier GetFreeCourierInCity(DateTime deliveryDateTime, int cityId);
     }
 }

@@ -24,7 +24,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert into Orders(OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice,CashPayment, IsPaid, IsCancel, CustomerId, CourierId) values(@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @CustomerId, @CourierId); SELECT SCOPE_IDENTITY()";
+                    string query = "Insert into Orders(OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice,CashPayment, IsPaid, IsCancel, CustomerId, CourierId, RestaurantId) values(@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @CustomerId, @CourierId, @RestaurantId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     
                     order.OrderId = Convert.ToInt32(cmd.ExecuteScalar());
@@ -37,6 +37,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel);
                     cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
                     cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
+                    cmd.Parameters.AddWithValue("@RestaurantId", order.RestaurantId);
 
                     cn.Open();
 
@@ -98,7 +99,9 @@ namespace DAL
                             if (dr["CustomerId"] != null)
                                 order.CustomerId = (int)dr["CustomerId"];
                             if (dr["CourierId"] != null)
-                                order.CourierId = (int)dr["CourierId"];
+                                order.CourierId = (string)dr["CourierId"];
+                            if (dr["RestaurantId"] != null)
+                                order.RestaurantId = (int)dr["RestaurantId"];
 
                             results.Add(order);
                         }
@@ -158,7 +161,9 @@ namespace DAL
                             if (dr["CustomerId"] != null)
                                 order.CustomerId = (int)dr["CustomerId"];
                             if (dr["CourierId"] != null)
-                                order.CourierId = (int)dr["CourierId"];
+                                order.CourierId = (string)dr["CourierId"];
+                            if (dr["RestaurantId"] != null)
+                                order.RestaurantId = (int)dr["RestaurantId"];
 
                         }
                     }
@@ -181,7 +186,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert Orders (OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice, CashPayment, IsPaid, IsCancel, DeliveryAddressId,  CustomerId, CourierId ) values (@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @DeliveryAddressId,  @CustomerId, @CourierId )";
+                    string query = "Insert Orders (OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice, CashPayment, IsPaid, IsCancel, DeliveryAddressId,  CustomerId, CourierId, RestaurantId ) values (@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @DeliveryAddressId,  @CustomerId, @CourierId. @RestaurantId )";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
@@ -192,7 +197,8 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@IsPaid", order.IsPaid);
                     cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel);
                     cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-                    cmd.Parameters.AddWithValue("@CourierIdl", order.CourierId);
+                    cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
+                    cmd.Parameters.AddWithValue("@RestaurantId", order.RestaurantId);
 
 
                     cn.Open();
@@ -219,7 +225,7 @@ namespace DAL
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
 
-                    string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, DeliveryAddressId = @DeliveryAddressId,  CustomerId = @CustomerId, CourierId = @CourierId where OrderId = @OrderId";
+                    string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, DeliveryAddressId = @DeliveryAddressId,  CustomerId = @CustomerId, CourierId = @CourierId, RestaurantId = @RestaurantId where OrderId = @OrderId";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@OrderId", order.OrderId);
@@ -231,7 +237,8 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@IsPaid", order.IsPaid);
                     cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel);
                     cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-                    cmd.Parameters.AddWithValue("@CourierIdl", order.CourierId);
+                    cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
+                    cmd.Parameters.AddWithValue("@RestaurantId", order.RestaurantId);
 
 
                     cn.Open();

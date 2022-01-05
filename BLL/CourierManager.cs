@@ -10,14 +10,72 @@ namespace BLL
     public class CourierManager:ICourierManager
     {
         private ICourierDB CourierDb { get; }
-        public CourierManager(ICourierDB courierDb)
+        private IOrderDB OrderDb { get; }
+        private IRestaurantDB RestaurantDb { get; }
+        public CourierManager(ICourierDB courierDb, IOrderDB orderDb, IRestaurantDB restaurantDb)
         {
             CourierDb = courierDb;
+            OrderDb = orderDb;
+            RestaurantDb = restaurantDb;
         }
 
-        public Courier GetUser(string email, string password)
+        public Courier GetCourier(string email, string password)
         {
             return CourierDb.GetUser(email, password);
+        }
+
+        public Courier GetFreeCourierInCity(DateTime deliveryDateTime, int cityId)
+        {
+            // get all couriers where working city is the same
+            Courier result = null;
+            List<Courier> couriers = CourierDb.GetCouriers().FindAll(c => c.WorkingCityId == cityId);
+            if (couriers.Count == 0) return result;
+            //get all orders
+            //from orders extract restaurant id
+            //from orders get delivery times and couriers
+            List<Order> orders = OrderDb.GetOrders();
+            if(orders.Count > 0)
+            {
+                //get orders from the same city
+                List<Order> filtered = new List<Order>();
+                foreach(Order order in orders)
+                {
+                    //check the scheduled time is in range and active order
+                    if (order.EffectiveDeliveryDate == null && (order.ScheduledDeliveryDate <= deliveryDateTime.AddMinutes(15) || order.ScheduledDeliveryDate >= deliveryDateTime.AddMinutes(-15))) 
+                    { 
+                        Restaurant restaurant = RestaurantDb.GetRestaurantById(order.RestaurantId);
+                        if (restaurant.CityId == cityId) filtered.Add(order);
+                    }
+                }
+
+                if(filtered.Count > 0)
+                {
+                    //count orders assigned to different couriers
+                    //if count is less then 5 assign the courier
+                    foreach(Courier courier in couriers)
+                    {
+                        int count = filtered.FindAll(f => f.CourierId.Equals(courier.CourierId)).Count;
+                        if(count < 5 )
+                        {
+                            result = courier;
+                            break;
+                        }
+                    }
+
+                }
+                else
+                {
+                    result = couriers[0];
+                }
+            }
+            else
+            {
+                result = couriers[0];
+            }
+
+            return result;
+
+
         }
     }
 }

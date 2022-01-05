@@ -1,5 +1,6 @@
 ﻿
 using BLL;
+using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,11 +22,16 @@ namespace VsEatMVC.Controllers
         private IRestaurantManager RestaurantManager { get; }
         private IDishManager DishManager { get; }
 
-        public ClientController(ILogger<ClientController> logger, IRestaurantManager restaurantManager, IDishManager dishManager)
+        private ICourierManager CourierManager { get; }
+        private IOrderManager OrderManager { get; }
+
+        public ClientController(ILogger<ClientController> logger, IRestaurantManager restaurantManager, IDishManager dishManager, ICourierManager courierManager, IOrderManager orderManager)
         {
             _logger = logger;
             RestaurantManager = restaurantManager;
             DishManager = dishManager;
+            CourierManager = courierManager;
+            OrderManager = orderManager;
 
         }
         public IActionResult Client()
@@ -143,7 +149,7 @@ namespace VsEatMVC.Controllers
             return RedirectToAction(nameof(Cart));
         }
         //Remove cart item
-        public ActionResult RemoveCartItem(int cartItemId)
+        public IActionResult RemoveCartItem(int cartItemId)
         {
             //get cart
             var cartJson = HttpContext.Session.GetString("Cart");
@@ -171,7 +177,7 @@ namespace VsEatMVC.Controllers
 
             return RedirectToAction(nameof(Cart));
         }
-        public ActionResult Cart()
+        public IActionResult Cart()
         {
             //if cart list exist in session?
             var cartJson = HttpContext.Session.GetString("Cart");
@@ -203,13 +209,121 @@ namespace VsEatMVC.Controllers
                 OrderItems = cart.Items
 
             };
-            ViewBag.minDate = DateTime.Now.ToString("yyyy-MM-ddThh:mm");
-            ViewBag.maxDate = DateTime.Now.AddDays(2).ToString("yyyy-MM-ddThh:mm");
+            //create datalist for dropdown menu
+            DateTime minOrderDate = DateTime.Today.AddHours(8).AddMinutes(30);
+            DateTime maxOrderDate = DateTime.Today.AddHours(20).AddMinutes(30);
+            DateTime openHour = DateTime.Today.AddHours(9);
+            //before 8:30 -> from 9 today
+            //calculating start hour
+            if (DateTime.Now > minOrderDate && DateTime.Now < maxOrderDate)
+            {
+                //get closest 15 min divider over 30 mins
+                int hours = DateTime.Now.Hour;
+                int minutes = DateTime.Now.Minute;
+
+                if (minutes <= 15) 
+                {                 
+                    minutes = 45;
+                } 
+                else if (minutes > 15 && minutes <= 30) 
+                { 
+                    minutes = 0;
+                    hours++;
+                } 
+                else if(minutes > 30 && minutes <= 45)
+                {
+                    minutes = 15;
+                    hours++;
+                }
+                else if (minutes > 45 && minutes <= 59)
+                {
+                    minutes = 30;
+                    hours++;
+                }
+
+                openHour = DateTime.Today.AddHours(hours).AddMinutes(minutes);
+            }
+            if(DateTime.Now > maxOrderDate)
+            {
+                openHour = DateTime.Today.AddDays(1).AddHours(9);
+                maxOrderDate = DateTime.Today.AddDays(1).AddHours(21);
+            }
+            //create list 
+            List<DateTime> dateList = new List<DateTime>();
+            while (openHour <= maxOrderDate)
+            {
+                dateList.Add(openHour);
+                openHour = openHour.AddMinutes(15);
+            }
+
+            ViewBag.dateList = dateList;
+
             //show cart items and total price
             //select delivery date and time
-            //select payment type
+            //select payment type -> if immediate pay-> cash payment
             return View(order);
         }
+        [HttpPost]
+        public IActionResult CreateOrder(OrderDetails orderDetails)
+        {
+            //get free couriers
+            int cityId = RestaurantManager.GetRestaurantById(orderDetails.RestaurantId).CityId;
+            Courier courier = CourierManager.GetFreeCourierInCity(orderDetails.ScheduledDeliveryDate, cityId);
+            if(courier == null)
+            {
+                return RedirectToAction("OrderError", new { message = "There is no available courier!" });
+            }
+            //save order to database
+            Order order = new Order
+            {
+                OrderNumber = orderDetails.OrderNumber,
+                OrderDate = orderDetails.OrderDate,
+                ScheduledDeliveryDate = orderDetails.ScheduledDeliveryDate,
+                TotalPrice = (decimal)orderDetails.TotalPrice,
+                CashPayment = orderDetails.CashPayment,
+                IsPaid = orderDetails.IsPaid,
+                IsCancel = false,
+                CustomerId = orderDetails.CustomerId,
+                CourierId = courier.Id
+            };
+            List<OrderDetail> itemList = new List<OrderDetail>();
+            foreach(CartItem item in orderDetails.OrderItems)
+            {
+                OrderDetail orderDetail = new OrderDetail
+                {
+                    UnitPrice = (decimal)item.Price,
+                    Quantity = item.Quantity,
+                    Discount = 0,
+                    DishId = item.ItemId
+                };
+
+                itemList.Add(orderDetail);
+
+            }
+            OrderManager.CreateOrder(order, itemList);
+            return RedirectToAction(nameof(Orders));
+        }
+
+        private object OrderError(string message)
+        {
+            ViewBag.message = message;
+            return View();
+        }
+
+        private object Orders()
+        {
+            //get user id (auth)
+            int userId = 1;
+            //get active user orders
+            List<Order> orders = new List<Order>();
+            foreach(Order order in OrderManager.GetOrderByUserId(userId))
+            {
+                if (!order.IsCancel && order.EffectiveDeliveryDate == null) orders.Add(order);
+            }
+
+            return View(orders);
+        }
+
         public IActionResult ModifyOrder()
         {
             return View();
