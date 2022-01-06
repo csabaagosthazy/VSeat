@@ -52,7 +52,7 @@
                                     @if (DateTime.Now.AddHours(3) < item.ScheduledDeliveryDate)
                                     {
                                         <td>
-                                            @Html.ActionLink("Cancel", "CancelOrder", new { orderId = item.OrderNumber })
+                                            @Html.ActionLink("Cancel", "CancelOrder", new { orderId = item.OrderId })
                                         </td>
 
                                     }

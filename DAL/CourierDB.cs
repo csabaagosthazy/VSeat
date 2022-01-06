@@ -77,7 +77,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select * from Restaurants";
+                    string query = "Select * from Couriers";
                     SqlCommand cmd = new SqlCommand(query, cn);
 
                     cn.Open();
@@ -91,7 +91,7 @@ namespace DAL
 
                             Courier courier = new Courier();
 
-                            courier.CourierId = (int)dr["CourierId"];
+                            courier.CourierId = (string)dr["CourierId"];
 
                             if (dr["LoginId"] != null)
                                 courier.LoginId = (string)dr["LoginId"];

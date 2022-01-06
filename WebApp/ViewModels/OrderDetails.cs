@@ -10,7 +10,7 @@ namespace WebApp.ViewModels
         public int OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime ScheduledDeliveryDate { get; set; }
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         public bool CashPayment { get; set; }
         public bool IsPaid { get; set; } = false;
         public int CustomerId { get; set; }

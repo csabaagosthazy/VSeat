@@ -64,7 +64,6 @@ namespace DAL
                 {
                     string query = "Select * from Orders";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
 
                     cn.Open();
 
@@ -125,9 +124,8 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select from Orders where id = @id";
+                    string query = "Select from Orders where OrderId = @id";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", id);
 
                     cn.Open();
@@ -188,7 +186,6 @@ namespace DAL
                 {
                     string query = "Insert Orders (OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice, CashPayment, IsPaid, IsCancel, DeliveryAddressId,  CustomerId, CourierId, RestaurantId ) values (@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @DeliveryAddressId,  @CustomerId, @CourierId. @RestaurantId )";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
                     cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", order.ScheduledDeliveryDate);
@@ -227,7 +224,6 @@ namespace DAL
 
                     string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, DeliveryAddressId = @DeliveryAddressId,  CustomerId = @CustomerId, CourierId = @CourierId, RestaurantId = @RestaurantId where OrderId = @OrderId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@OrderId", order.OrderId);
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
                     cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
@@ -264,9 +260,8 @@ namespace DAL
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
 
-                    string query = "DELETE FROM Orders where @id = id";
+                    string query = "DELETE FROM Orders where @OrderId = id";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", id);
 
 

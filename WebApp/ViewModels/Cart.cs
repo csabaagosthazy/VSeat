@@ -12,7 +12,7 @@ namespace WebApp.ViewModels
         public int UserId { get; set; }
         public int RestaurantId { get; set; }
         public decimal Discount { get; set; } = 0;
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         public List<CartItem> Items { get; set; }
     }
 }

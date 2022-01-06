@@ -56,6 +56,12 @@
             <br />
             <div class="col-8">
                 <form asp-action="CreateOrder" class="form-row">
+                    @Html.HiddenFor(model => model.OrderNumber)
+                    @Html.HiddenFor(model => model.OrderDate)
+                    @Html.HiddenFor(model => model.TotalPrice)
+                    @Html.HiddenFor(model => model.CustomerId)
+                    @Html.HiddenFor(model => model.RestaurantId)
+                    @Html.HiddenFor(model => model.OrderItems)
                     <div class="form-group col-md-4">
                         @Html.Label("Delivery date and time:")
                         @Html.DropDownListFor(Model => Model.ScheduledDeliveryDate, new SelectList(ViewBag.dateList))

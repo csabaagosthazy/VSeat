@@ -28,20 +28,25 @@ namespace BLL
         {
             // get all couriers where working city is the same
             Courier result = null;
-            List<Courier> couriers = CourierDb.GetCouriers().FindAll(c => c.WorkingCityId == cityId);
-            if (couriers.Count == 0) return result;
+            var couriers = CourierDb.GetCouriers();
+            if(couriers == null ) return result;
+
+            couriers = couriers.FindAll(c => c.WorkingCityId == cityId);
+            if (couriers == null) return result;
             //get all orders
             //from orders extract restaurant id
             //from orders get delivery times and couriers
-            List<Order> orders = OrderDb.GetOrders();
-            if(orders.Count > 0)
+            var orderList = OrderDb.GetOrders();
+
+            if(orderList != null)
             {
+                List<Order> orders = orderList;
                 //get orders from the same city
                 List<Order> filtered = new List<Order>();
                 foreach(Order order in orders)
                 {
                     //check the scheduled time is in range and active order
-                    if (order.EffectiveDeliveryDate == null && (order.ScheduledDeliveryDate <= deliveryDateTime.AddMinutes(15) || order.ScheduledDeliveryDate >= deliveryDateTime.AddMinutes(-15))) 
+                    if (order.EffectiveDeliveryDate == null && (order.ScheduledDeliveryDate <= deliveryDateTime.AddMinutes(15) || order.ScheduledDeliveryDate >= deliveryDateTime.AddMinutes(-15)) && !order.IsCancel) 
                     { 
                         Restaurant restaurant = RestaurantDb.GetRestaurantById(order.RestaurantId);
                         if (restaurant.CityId == cityId) filtered.Add(order);

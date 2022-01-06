@@ -163,7 +163,7 @@ namespace VsEatMVC.Controllers
             }
             else
             {
-                double newTotalPrice = 0.0;
+                decimal newTotalPrice = 0;
                 foreach (CartItem cartItem in modifiedList)
                 {
                     cartList.Add(cartItem);
@@ -206,6 +206,7 @@ namespace VsEatMVC.Controllers
                 CashPayment = false,
                 IsPaid = false,
                 CustomerId = cart.UserId,
+                RestaurantId = cart.RestaurantId,
                 OrderItems = cart.Items
 
             };
@@ -304,13 +305,13 @@ namespace VsEatMVC.Controllers
             return RedirectToAction(nameof(Orders));
         }
 
-        private object OrderError(string message)
+        public IActionResult OrderError(string message)
         {
             ViewBag.message = message;
             return View();
         }
 
-        private object Orders()
+        public IActionResult Orders()
         {
             //get user id (auth)
             int userId = 1;
