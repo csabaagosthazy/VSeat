@@ -84,8 +84,8 @@ namespace WebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     //à revoir
-                    Session["UserID"] = Input.Email;
-                    Session["UserName"] = Input.Email;
+                    //Session["UserID"] = Input.Email;
+                    //Session["UserName"] = Input.Email;
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
