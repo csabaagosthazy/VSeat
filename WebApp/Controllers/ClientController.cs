@@ -35,12 +35,20 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult Client()
         {
-            
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             return View();
         }
 
         public IActionResult BrowseRestaurants()
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //get restaurants form db
             var allRestaurants = RestaurantManager.GetRestaurants();
             //create view model list
@@ -87,12 +95,20 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult SelectDishes(int id)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var dishes = DishManager.GetDishesByRestaurantId(id);
             return View(dishes);
         }
         //Restaurant details
         public IActionResult RestaurantDetails (int id)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var restaurant = RestaurantManager.GetRestaurantById(id);
             var city = RestaurantManager.GetCityById(restaurant.CityId);
             RestaurantVM vm = new RestaurantVM
@@ -111,6 +127,10 @@ namespace VsEatMVC.Controllers
         // AddToCart  
         public IActionResult AddToCart(int dishId)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //if cart list exist in session?
             var cartJson = HttpContext.Session.GetString("Cart");
             //get dish from db and convert it to cartitem
@@ -119,7 +139,7 @@ namespace VsEatMVC.Controllers
             var restaurantId = dish.RestaurantId;
             //cart is bind to user
             //get from auth method
-            var userId = "1";
+            var userId = HttpContext.Session.GetString("UserId");
 
             CartItem item = new CartItem
             {
@@ -183,6 +203,10 @@ namespace VsEatMVC.Controllers
         //Remove cart item
         public IActionResult RemoveCartItem(int cartItemId)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //get cart
             var cartJson = HttpContext.Session.GetString("Cart");
             var cart = JsonConvert.DeserializeObject<Cart>(cartJson);
@@ -211,6 +235,10 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult Cart()
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //if cart list exist in session?
             var cartJson = HttpContext.Session.GetString("Cart");
             if (cartJson == null)
@@ -226,6 +254,10 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult CreateOrder()
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var cartJson = HttpContext.Session.GetString("Cart");
             var cart = JsonConvert.DeserializeObject<Cart>(cartJson);
             //create order object
@@ -299,6 +331,10 @@ namespace VsEatMVC.Controllers
         [HttpPost]
         public IActionResult CreateOrder(OrderDetails orderDetails)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //get free couriers
             int cityId = RestaurantManager.GetRestaurantById(orderDetails.RestaurantId).CityId;
             Courier courier = CourierManager.GetFreeCourierInCity(orderDetails.ScheduledDeliveryDate, cityId);
@@ -348,6 +384,10 @@ namespace VsEatMVC.Controllers
 
         public IActionResult CancelOrder(long orderId)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //get order to modify
             Order orderToCancel = OrderManager.GetOrderById(orderId);
             //cancel order
@@ -363,14 +403,22 @@ namespace VsEatMVC.Controllers
 
         public IActionResult OrderError(string message)
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             ViewBag.message = message;
             return View();
         }
 
         public IActionResult Orders()
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             //get user id (auth)
-            string userId = "1";
+            string userId = HttpContext.Session.GetString("UserId");
             //get active user orders
             List<Order> orders = new List<Order>();
             foreach(Order order in OrderManager.GetOrderByUserId(userId))
@@ -379,11 +427,6 @@ namespace VsEatMVC.Controllers
             }
 
             return View(orders);
-        }
-
-        public IActionResult ModifyOrder()
-        {
-            return View();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
