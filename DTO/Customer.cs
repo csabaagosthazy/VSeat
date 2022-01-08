@@ -2,7 +2,7 @@
 {
     public class Customer : AspNetUser
     {
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public string LoginId { get; set; }
     }
 }

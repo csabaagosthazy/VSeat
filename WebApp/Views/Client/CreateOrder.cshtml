@@ -12,7 +12,7 @@
             <ul>
                 <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
                 <li><a asp-area="" asp-controller="Client" asp-action="BrowseRestaurants">Browse restaurants</a></li>
-                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Cart</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Shopping cart</a></li>
             </ul>
         </nav>
 
@@ -56,12 +56,19 @@
             <br />
             <div class="col-8">
                 <form asp-action="CreateOrder" class="form-row">
-                    @Html.HiddenFor(model => model.OrderNumber)
-                    @Html.HiddenFor(model => model.OrderDate)
-                    @Html.HiddenFor(model => model.TotalPrice)
-                    @Html.HiddenFor(model => model.CustomerId)
-                    @Html.HiddenFor(model => model.RestaurantId)
-                    @Html.HiddenFor(model => model.OrderItems)
+                    @Html.HiddenFor(Model => Model.OrderNumber)
+                    @Html.HiddenFor(Model => Model.OrderDate)
+                    @Html.HiddenFor(Model => Model.TotalPrice)
+                    @Html.HiddenFor(Model => Model.CustomerId)
+                    @Html.HiddenFor(Model => Model.RestaurantId)
+                    @for (int i = 0; i < Model.OrderItems.Count; i++)
+                    {
+                        @Html.HiddenFor(Model => Model.OrderItems[i].ItemId)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].RestaurantId)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].ItemName)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].Quantity)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].Price)
+                    }
                     <div class="form-group col-md-4">
                         @Html.Label("Delivery date and time:")
                         @Html.DropDownListFor(Model => Model.ScheduledDeliveryDate, new SelectList(ViewBag.dateList))

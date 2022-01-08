@@ -35,8 +35,9 @@ namespace WebApp
             services.AddScoped<IOrderManager, OrderManager>();
             services.AddScoped<IOrderDB, OrderDB>();
             services.AddScoped<IOrderDetailDB, OrderDetailDB>();
+            services.AddScoped<ICityDB, CityDB>();
             services.AddSession(options =>{
-                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
         }
 

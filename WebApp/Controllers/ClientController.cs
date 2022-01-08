@@ -21,7 +21,6 @@ namespace VsEatMVC.Controllers
 
         private IRestaurantManager RestaurantManager { get; }
         private IDishManager DishManager { get; }
-
         private ICourierManager CourierManager { get; }
         private IOrderManager OrderManager { get; }
 
@@ -42,8 +41,29 @@ namespace VsEatMVC.Controllers
 
         public IActionResult BrowseRestaurants()
         {
+            //get restaurants form db
             var allRestaurants = RestaurantManager.GetRestaurants();
-            List<DTO.Restaurant> result = new List<DTO.Restaurant>();
+            //create view model list
+            List<RestaurantVM> vmRestaurants = new List<RestaurantVM>();
+            foreach(DTO.Restaurant dr in allRestaurants)
+            {
+                //get city name an postal code
+                var city = RestaurantManager.GetCityById(dr.CityId);
+                RestaurantVM vm = new RestaurantVM
+                {
+                    RestaurantId = dr.RestaurantId,
+                    Name = dr.Name,
+                    Phone = dr.Phone,
+                    Email = dr.Email,
+                    City = city.Name,
+                    ZipCode = city.ZipCode,
+                    Street = dr.Street,
+                    StreetNumber = dr.StreetNumber
+                };
+                vmRestaurants.Add(vm);
+
+            }
+            List<RestaurantVM> result = new List<RestaurantVM>();
             var cartJson = HttpContext.Session.GetString("Cart");
             //if the cart is not empty, give only one restaurant which is on the list
             if (cartJson != null)
@@ -51,8 +71,8 @@ namespace VsEatMVC.Controllers
                 //at this point we have only one item, or items with the same restaurant id
                 var cart = JsonConvert.DeserializeObject<Cart>(cartJson);
                 //the list must contain only the cart reasturant
-                IEnumerable<DTO.Restaurant> query = allRestaurants.Where(rest => rest.RestaurantId == cart.RestaurantId);
-                foreach (DTO.Restaurant restaurant in query)
+                IEnumerable<RestaurantVM> query = vmRestaurants.Where(rest => rest.RestaurantId == cart.RestaurantId);
+                foreach (RestaurantVM restaurant in query)
                 {
                     result.Add(restaurant);
                 }
@@ -60,7 +80,7 @@ namespace VsEatMVC.Controllers
             }
             else
             {
-                result = allRestaurants;
+                result = vmRestaurants;
             }
 
             return View(result);
@@ -74,7 +94,19 @@ namespace VsEatMVC.Controllers
         public IActionResult RestaurantDetails (int id)
         {
             var restaurant = RestaurantManager.GetRestaurantById(id);
-            return View(restaurant);
+            var city = RestaurantManager.GetCityById(restaurant.CityId);
+            RestaurantVM vm = new RestaurantVM
+            {
+                RestaurantId = restaurant.RestaurantId,
+                Name = restaurant.Name,
+                Phone = restaurant.Phone,
+                Email = restaurant.Email,
+                City = city.Name,
+                ZipCode = city.ZipCode,
+                Street = restaurant.Street,
+                StreetNumber = restaurant.StreetNumber
+            };
+            return View(vm);
         }
         // AddToCart  
         public IActionResult AddToCart(int dishId)
@@ -87,7 +119,7 @@ namespace VsEatMVC.Controllers
             var restaurantId = dish.RestaurantId;
             //cart is bind to user
             //get from auth method
-            var userId = 1;
+            var userId = "1";
 
             CartItem item = new CartItem
             {
@@ -285,7 +317,8 @@ namespace VsEatMVC.Controllers
                 IsPaid = orderDetails.IsPaid,
                 IsCancel = false,
                 CustomerId = orderDetails.CustomerId,
-                CourierId = courier.Id
+                RestaurantId = orderDetails.RestaurantId,
+                CourierId = courier.CourierId
             };
             List<OrderDetail> itemList = new List<OrderDetail>();
             foreach(CartItem item in orderDetails.OrderItems)
@@ -301,7 +334,30 @@ namespace VsEatMVC.Controllers
                 itemList.Add(orderDetail);
 
             }
-            OrderManager.CreateOrder(order, itemList);
+            Order res = OrderManager.CreateOrder(order, itemList);
+            if (res != null)
+            {
+                HttpContext.Session.Remove("Cart");
+                return RedirectToAction(nameof(Orders));
+            }
+            else 
+            {
+                return RedirectToAction("OrderError", new { message = "An error occured!" });
+            }
+        }
+
+        public IActionResult CancelOrder(long orderId)
+        {
+            //get order to modify
+            Order orderToCancel = OrderManager.GetOrderById(orderId);
+            //cancel order
+            int res = OrderManager.CancelOrder(orderToCancel);
+
+            if(res == 0)
+            {
+                return RedirectToAction("OrderError", new { message = "Error during order cancellation!" });
+            }
+
             return RedirectToAction(nameof(Orders));
         }
 
@@ -314,7 +370,7 @@ namespace VsEatMVC.Controllers
         public IActionResult Orders()
         {
             //get user id (auth)
-            int userId = 1;
+            string userId = "1";
             //get active user orders
             List<Order> orders = new List<Order>();
             foreach(Order order in OrderManager.GetOrderByUserId(userId))

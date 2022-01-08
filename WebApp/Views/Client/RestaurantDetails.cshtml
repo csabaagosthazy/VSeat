@@ -1,4 +1,4 @@
-﻿@model DTO.Restaurant
+﻿@model WebApp.ViewModels.RestaurantVM
 @{
     ViewData["Title"] = "Client Page";
 }
@@ -29,8 +29,11 @@
                 <strong>@Html.DisplayNameFor(Model => Model.Email): </strong>
                 @Html.DisplayFor(Model => Model.Email)
                 <br />
-                <strong>@Html.DisplayNameFor(Model => Model.CityId): </strong>
-                @Html.DisplayFor(Model => Model.CityId)
+                <strong>@Html.DisplayNameFor(Model => Model.City): </strong>
+                @Html.DisplayFor(Model => Model.City)
+                <br />
+                <strong>@Html.DisplayNameFor(Model => Model.ZipCode): </strong>
+                @Html.DisplayFor(Model => Model.ZipCode)
                 <br />
                 <strong>@Html.DisplayNameFor(Model => Model.Street): </strong>
                 @Html.DisplayFor(Model => Model.Street)

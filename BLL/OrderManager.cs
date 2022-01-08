@@ -19,22 +19,35 @@ namespace BLL
 
         public Order CreateOrder(Order order, List<OrderDetail> orderDetails)
         {
-            int createdOrderId = OrderDb.CreateOrder(order).OrderId;
+            Order createdOrder = OrderDb.CreateOrder(order);
+            long createdOrderId = createdOrder.OrderId;
             foreach(var orderDetail in orderDetails)
             {
-                OrderDetailDb.InsertOrderDetail(createdOrderId, orderDetail);
+                OrderDetailDb.InsertOrderDetail((int)createdOrderId, orderDetail);
             }
             
 
-            return order;
+            return createdOrder;
 
         }
 
-        public List<Order> GetOrderByUserId(int userId)
+        public List<Order> GetOrderByUserId(string userId)
         {
-            List<Order> result = OrderDb.GetOrders().FindAll(o => o.CustomerId == userId);
+            List<Order> allOrders = OrderDb.GetOrders();
+            List<Order> result = allOrders.FindAll(o => o.CustomerId.Equals(userId));
             return result;
 
+        }
+
+        public Order GetOrderById(long orderId)
+        {
+            return OrderDb.GetOrderById(orderId);
+        }
+
+        public int CancelOrder(Order order)
+        {
+            order.IsCancel = true;
+            return OrderDb.UpdateOrder(order);
         }
     }
 }

@@ -115,7 +115,7 @@ namespace DAL
 
                     cmd.Parameters.AddWithValue("@LoginId", customer.Id);
 
-                    customer.CustomerId = Convert.ToInt32(cmd.ExecuteScalar());
+                    customer.CustomerId = cmd.ExecuteScalar().ToString();
 
                     cn.Open();
                 }

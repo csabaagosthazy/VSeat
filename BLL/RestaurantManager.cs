@@ -9,10 +9,12 @@ namespace BLL
     public class RestaurantManager : IRestaurantManager
     {
         private IRestaurantDB RestaurantDB { get; }
+        private ICityDB CityDb { get; }
 
-        public RestaurantManager(IRestaurantDB restaurantDB)
+        public RestaurantManager(IRestaurantDB restaurantDB, ICityDB cityDb)
         {
             RestaurantDB = restaurantDB;
+            CityDb = cityDb;
         }
         public List<Restaurant> GetRestaurants()
         {
@@ -24,6 +26,11 @@ namespace BLL
         public Restaurant GetRestaurantById(int id)
         {
             return RestaurantDB.GetRestaurantById(id);
+        }
+
+       public City GetCityById(int cityId)
+        {
+            return CityDb.GetCityById(cityId);
         }
     }
 }
