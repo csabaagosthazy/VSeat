@@ -1,0 +1,67 @@
+﻿@model IEnumerable<WebApp.ViewModels.RestaurantVM>
+@{
+    ViewData["Title"] = "Client Page";
+}
+
+<div class="container-fluid h-100">
+    <header class="page-header">
+        <h2>My page</h2>
+    </header>
+    <section class="page-section">
+        <nav class="sidenav">
+            <ul>
+                <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="Orders">My orders</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Shopping cart</a></li>
+            </ul>
+        </nav>
+
+        <article class="page">
+            <h1>Restaurant list</h1>
+            <hr />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.City)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ZipCode)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ZipCode)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Menu", "SelectDishes", new { id = item.RestaurantId }) |
+                                @Html.ActionLink("Details", "RestaurantDetails", new { id = item.RestaurantId })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div>
+                <a asp-action="Client">Back</a>
+            </div>
+
+        </article>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

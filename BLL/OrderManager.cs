@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace BLL
 {
-    public class OrderManager
+    public class OrderManager : IOrderManager
     {
         private IOrderDB OrderDb { get; }
         private IOrderDetailDB OrderDetailDb { get; }
@@ -19,16 +19,35 @@ namespace BLL
 
         public Order CreateOrder(Order order, List<OrderDetail> orderDetails)
         {
-            OrderDb.CreateOrder(order);
+            Order createdOrder = OrderDb.CreateOrder(order);
+            long createdOrderId = createdOrder.OrderId;
             foreach(var orderDetail in orderDetails)
             {
-                OrderDetailDb.InsertOrderDetail(order.OrderId, orderDetail);
+                OrderDetailDb.InsertOrderDetail((int)createdOrderId, orderDetail);
             }
             
 
-            return order;
+            return createdOrder;
 
         }
 
+        public List<Order> GetOrderByUserId(string userId)
+        {
+            List<Order> allOrders = OrderDb.GetOrders();
+            List<Order> result = allOrders.FindAll(o => o.CustomerId.Equals(userId));
+            return result;
+
+        }
+
+        public Order GetOrderById(long orderId)
+        {
+            return OrderDb.GetOrderById(orderId);
+        }
+
+        public int CancelOrder(Order order)
+        {
+            order.IsCancel = true;
+            return OrderDb.UpdateOrder(order);
+        }
     }
 }

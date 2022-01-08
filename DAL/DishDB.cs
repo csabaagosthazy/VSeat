@@ -8,7 +8,7 @@ using DTO;
 
 namespace DAL
 {
-    class DishDB : IDishDB
+    public class DishDB : IDishDB
     {
         private IConfiguration Configuration { get; }
 
@@ -28,7 +28,6 @@ namespace DAL
                 {
                     string query = "Select * from Dishes where RestaurantId = @RestaurantId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@RestaurantId", restaurantId);
 
                     cn.Open();
@@ -48,17 +47,17 @@ namespace DAL
                             if (dr["Name"] != null)
                                 dish.Name = (string)dr["Name"];
 
-                            if (dr["Description "] != null)
-                                dish.Description = (string)dr["Description "];
+                            if (dr["Description"] != null)
+                                dish.Description = (string)dr["Description"];
 
                             if (dr["Price"] != null)
-                                dish.Price = (float)dr["Price"];
+                                dish.Price = (decimal)dr["Price"];
                             if (dr["IsActive"] != null)
                                 dish.IsActive = (bool)dr["IsActive"];
                             if (dr["SpiceLevel"] != null)
                                 dish.SpiceLevel = (int)dr["SpiceLevel"];
              
-                             dish.RestaurantId = (int)dr[" RestaurantId"];
+                             dish.RestaurantId = (int)dr["RestaurantId"];
 
                             results.Add(dish);
                         }
@@ -82,9 +81,8 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select from Dished where DishId = @DishId";
+                    string query = "Select * from Dishes where DishId = @DishId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@DishId", dishId);
 
                     cn.Open();
@@ -102,17 +100,17 @@ namespace DAL
                             if (dr["Name"] != null)
                                 dish.Name = (string)dr["Name"];
 
-                            if (dr["Description "] != null)
-                                dish.Description = (string)dr["Description "];
+                            if (dr["Description"] != null)
+                                dish.Description = (string)dr["Description"];
 
                             if (dr["Price"] != null)
-                                dish.Price = (float)dr["Price"];
+                                dish.Price = (decimal)dr["Price"];
                             if (dr["IsActive"] != null)
                                 dish.IsActive = (bool)dr["IsActive"];
                             if (dr["SpiceLevel"] != null)
                                 dish.SpiceLevel = (int)dr["SpiceLevel"];
 
-                            dish.RestaurantId = (int)dr[" RestaurantId"];
+                            dish.RestaurantId = (int)dr["RestaurantId"];
                         }
                     }
                 }
@@ -125,7 +123,7 @@ namespace DAL
             return dish;
         }
 
-        public int AddOrder(Dish dish)
+        public int AddDish(Dish dish)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -134,9 +132,8 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert Dishes (Name, Description, Price, IsActive, SpiceLevel, RestaurantId) values (@Name, @Description, @Price, @IsActive, @SpiceLevel, @RestaurantId)";
+                    string query = "Insert Into Dishes (Name, Description, Price, IsActive, SpiceLevel, RestaurantId) values (@Name, @Description, @Price, @IsActive, @SpiceLevel, @RestaurantId)";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Name", dish.Name);
                     cmd.Parameters.AddWithValue("@Description", dish.Description);
                     cmd.Parameters.AddWithValue("@Price", dish.Price);
@@ -172,7 +169,6 @@ namespace DAL
 
                     string query = "Update Orders SET Name = @Name, Description = @Description, Price = @Price, IsActive = @IsActive , SpiceLevel = @SpiceLevel, RestaurantId = @RestaurantId where DishId = @DishId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@DishId", dish.DishId);
                     cmd.Parameters.AddWithValue("@Name", dish.Name);
                     cmd.Parameters.AddWithValue("@Description", dish.Description);
@@ -207,7 +203,6 @@ namespace DAL
 
                     string query = "DELETE FROM Dishes where DisId = @DisId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@DisId", dishID);
 
 

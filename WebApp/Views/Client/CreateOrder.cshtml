@@ -1,0 +1,95 @@
+﻿@model WebApp.ViewModels.OrderDetails
+@{
+    ViewData["Title"] = "Client Page";
+}
+
+<div class="container-fluid h-100">
+    <header class="page-header">
+        <h2>My page</h2>
+    </header>
+    <section class="page-section">
+        <nav class="sidenav">
+            <ul>
+                <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="BrowseRestaurants">Browse restaurants</a></li>
+                <li><a asp-area="" asp-controller="Client" asp-action="Cart">Shopping cart</a></li>
+            </ul>
+        </nav>
+
+        <article class="page">
+            <h1>Create order</h1>
+            <hr />
+            <div style="height: 120px; overflow: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                            </tr>
+                        }
+                </table>
+            </div>
+            <br />
+            <strong>Total price: @Html.DisplayFor(Model => Model.TotalPrice)</strong>
+            <br />
+            <div class="col-8">
+                <form asp-action="CreateOrder" class="form-row">
+                    @Html.HiddenFor(Model => Model.OrderNumber)
+                    @Html.HiddenFor(Model => Model.OrderDate)
+                    @Html.HiddenFor(Model => Model.TotalPrice)
+                    @Html.HiddenFor(Model => Model.CustomerId)
+                    @Html.HiddenFor(Model => Model.RestaurantId)
+                    @for (int i = 0; i < Model.OrderItems.Count; i++)
+                    {
+                        @Html.HiddenFor(Model => Model.OrderItems[i].ItemId)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].RestaurantId)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].ItemName)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].Quantity)
+                        @Html.HiddenFor(Model => Model.OrderItems[i].Price)
+                    }
+                    <div class="form-group col-md-4">
+                        @Html.Label("Delivery date and time:")
+                        @Html.DropDownListFor(Model => Model.ScheduledDeliveryDate, new SelectList(ViewBag.dateList))
+                    </div>
+                    <div class="form-group col-md-2" style="border-left : 20px">
+                        @Html.Label("Pay by cash")
+                        @Html.CheckBoxFor(Model => Model.CashPayment)
+                    </div>
+                    <div class="form-group col-md-2" style="border-left : 20px">
+                        @Html.Label("Pay now")
+                        @Html.CheckBoxFor(Model => Model.IsPaid)
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create order" class="btn btn-primary" style="float:right" />
+                    </div>
+                </form>
+            </div>
+            <br />
+            <div>
+                @Html.ActionLink("Back", "Cart")
+            </div>
+        </article>
+    </section>
+</div>

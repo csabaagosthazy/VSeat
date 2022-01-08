@@ -5,7 +5,7 @@ using DTO;
 
 namespace BLL
 {
-    interface IOrderDetailManager
+    public interface IOrderDetailManager
     {
         OrderDetail CreateOrderDetail(OrderDetail orderDetail);
     }

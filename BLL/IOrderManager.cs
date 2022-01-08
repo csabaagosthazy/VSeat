@@ -5,8 +5,12 @@ using DTO;
 
 namespace BLL
 {
-    interface IOrderManager
+    public interface IOrderManager
     {
-        Order CreateOrder(Order order);
+        Order CreateOrder(Order order, List<OrderDetail> orderDetails);
+        List<Order> GetOrderByUserId(string userId);
+        Order GetOrderById(long orderId);
+        int CancelOrder(Order order);
+
     }
 }

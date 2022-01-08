@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<WebApp.ViewModels.CartItem>
 @{
     ViewData["Title"] = "Client Page";
 }
@@ -10,16 +10,22 @@
     <section class="page-section">
         <nav class="sidenav">
             <ul>
+                <li><a asp-area="" asp-controller="Client" asp-action="Client">My site</a></li>
                 <li><a asp-area="" asp-controller="Client" asp-action="BrowseRestaurants">Browse restaurants</a></li>
-                <li><a asp-area="" asp-controller="Client" asp-action="Orders">My orders</a></li>
                 <li><a asp-area="" asp-controller="Client" asp-action="Cart">Shopping cart</a></li>
             </ul>
         </nav>
 
         <article class="page">
-            <h2>Welcome --username--</h2>
-            <p>Here you can create new orders or modify ongoing orders</p>
-           
+            <h2>Error</h2>
+            <br />
+            <h2>@ViewBag.message</h2>
+            <br />
+            <p>Please try again later</p>
+            <div>
+                <br />
+                @Html.ActionLink("Back", "CreateOrder")
+            </div>
         </article>
     </section>
 </div>

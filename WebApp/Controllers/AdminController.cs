@@ -21,6 +21,16 @@ namespace VsEatMVC.Controllers
         {
             return View();
         }
+        public IActionResult ManageUsers()
+        {
+            return View();
+        }
+
+        public IActionResult ManageRestaurants()
+        {
+            return View();
+        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

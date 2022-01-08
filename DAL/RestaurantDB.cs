@@ -8,7 +8,7 @@ using System.Data;
 
 namespace DAL
 {
-    class RestaurantDB
+    public class RestaurantDB : IRestaurantDB
     {
 
         private IConfiguration Configuration { get; }
@@ -18,7 +18,7 @@ namespace DAL
         }
         public List<Restaurant> GetRestaurants()
         {
-            List<Restaurant> results = null;
+            List<Restaurant> results = new List<Restaurant>();
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             try
@@ -47,8 +47,8 @@ namespace DAL
                             if (dr["Phone"] != null)
                                 restaurant.Phone = (string)dr["Phone"];
 
-
-                            restaurant.Email = (string)dr["Email"];
+                            if (dr["Email"] != null)
+                                restaurant.Email = (string)dr["Email"];
 
                             restaurant.Street = (string)dr["Street"];
 
@@ -60,7 +60,7 @@ namespace DAL
                         }
                     }
                 }
-            
+
             }
             catch (Exception e)
             {
@@ -78,9 +78,8 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select * from Restaurants where id = @id";
+                    string query = "Select * from Restaurants where RestaurantId = @id";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", id);
 
                     cn.Open();
@@ -102,13 +101,13 @@ namespace DAL
 
                             if (dr["Email"] != null)
                                 restaurant.Email = (string)dr["Email"];
-                            if (dr["StreetNo"] != null)
+                            if (dr["StreetNumber"] != null)
                                 restaurant.StreetNumber = (String)dr["StreetNumber"];
                             if (dr["Street"] != null)
                                 restaurant.Street = (string)dr["Street"];
-                            if (dr["City"] != null)
+                            if (dr["CityId"] != null)
                                 restaurant.CityId = (int)dr["CityId"];
-                           
+
 
 
                         }
@@ -132,9 +131,8 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert Restaurants (Name, Phone, Email, StreetNumber, Street, City,PostCode) values (@Name, @Phone, @Email, @StreetNumber, @Street, @CityId)";
+                    string query = "Insert Into Restaurants (Name, Phone, Email, CityId, Street, StreetNumber) values (@Name, @Phone, @Email, @StreetNumber, @Street, @CityId)";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Name", restaurant.Name);
                     cmd.Parameters.AddWithValue("@Phone", restaurant.Phone);
                     cmd.Parameters.AddWithValue("@Email", restaurant.Email);
@@ -167,7 +165,6 @@ namespace DAL
 
                     string query = "Update Restaurants SET Name = @Name, Phone = @Phone, Email = @Email, StreetNo = @StreetNo , Street = @Street, CityId = @CityId  where RestaurantId = @RestaurantId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@RestaurantID", restaurant.RestaurantId);
                     cmd.Parameters.AddWithValue("@Name", restaurant.Name);
                     cmd.Parameters.AddWithValue("@Phone", restaurant.Phone);
@@ -202,7 +199,6 @@ namespace DAL
 
                     string query = "DELETE FROM Restaurants where RestaurandId = @RestaurandId";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@RestaurandId", restaurantId);
 
                     cn.Open();

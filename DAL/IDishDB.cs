@@ -9,7 +9,7 @@ namespace DAL
     {
         List<Dish> GetDishesByResturantId(int RestaurantId);
         Dish GetDishById(int dishId);
-        int AddOrder(Dish dish);
+        int AddDish(Dish dish);
         int UpdateDish(Dish dish);
         int DeleteDish(int dishID);
 

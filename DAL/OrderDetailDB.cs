@@ -27,7 +27,6 @@ namespace DAL
                 {
                     string query = "Insert into OrderDetails(UnitPrice, Quantity, Discount, OrderId, DishId) values(@UnitPrice, @Quantity, @Discount, @OrderId, @DishId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    orderDetail.OrderDetailId = Convert.ToInt32(cmd.ExecuteScalar());
                     cmd.Parameters.AddWithValue("@UnitPrice", orderDetail.UnitPrice);
                     cmd.Parameters.AddWithValue("@Quantity", orderDetail.Quantity);
                     cmd.Parameters.AddWithValue("@Discount", orderDetail.Discount);
@@ -35,6 +34,8 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@DishId", orderDetail.DishId);
 
                     cn.Open();
+
+                    orderDetail.OrderDetailId = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (Exception e)
