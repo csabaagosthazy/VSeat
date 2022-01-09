@@ -1,5 +1,7 @@
 ﻿using System;
+using DAL;
 using DTO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -16,13 +18,18 @@ namespace WebApp.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<WebAppContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("WebAppContextConnection")));
+                //services.AddDbContext<WebAppContext>(options =>
+                //    options.UseSqlServer(
+                //        context.Configuration.GetConnectionString("WebAppContextConnection")));
 
-                services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<WebAppContext>();
+                //services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                //    .AddEntityFrameworkStores<WebAppContext>();
+                
+    
+                
             });
+
+            
         }
     }
 }

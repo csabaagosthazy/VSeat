@@ -7,7 +7,7 @@ using DTO;
 
 namespace DAL
 {
-    class CityDB : ICityDB
+    public class CityDB : ICityDB
     {
         private IConfiguration Configuration { get; }
 
@@ -27,7 +27,7 @@ namespace DAL
                 {
                     string query = "Select * from Cities";
                     SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    
                     
                     cn.Open();
 
@@ -46,8 +46,8 @@ namespace DAL
                             if (dr["Name"] != null)
                                 city.Name = (string)dr["Name"];
 
-                            if (dr["Zip"] != null)
-                                city.ZipCode = (int)dr["Zip"];                    
+                            if (dr["ZipCode"] != null)
+                                city.ZipCode = (int)dr["ZipCode"];                    
 
                          
                             results.Add(city);

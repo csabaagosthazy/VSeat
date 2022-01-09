@@ -1,7 +1,7 @@
 ﻿@page
-@model RegisterModel
+@model CourierRegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register as courier";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -40,16 +40,29 @@
                 <span asp-validation-for="Input.StreetNumber" class="text-danger"></span>
             </div>
 
-        <div class="form-group">
-            <label asp-for="Input.CityId" class="control-label"></label>    
-            <select asp-for="Input.CityId" asp-items="@ViewBag.citiesList as SelectList">
-                <option>Please select one</option>
-            </select>
+            <div class="form-group">
+                <label asp-for="Input.CityId" class="control-label"></label>
+                <select asp-for="Input.CityId" asp-items="@ViewBag.citiesList as SelectList">
+                    <option>Please select one</option>
+                </select>
+                <span asp-validation-for="Input.CityId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.WorkingCityId" class="control-label"></label>
+                <select asp-for="Input.WorkingCityId" asp-items="@ViewBag.citiesList as SelectList">
+                    <option>Please select one</option>
+                </select>
+                <span asp-validation-for="Input.WorkingCityId" class="text-danger"></span>
+            </div>
+
+        
+
+            @*<div class="form-group">
+            <label asp-for="Input.CityId" class="control-label"></label>
+            @Html.DropDownList("SelectedCity", ViewBag.citydropDownList as SelectList, "City")
             <span asp-validation-for="Input.CityId" class="text-danger"></span>
-        </div>
-            
-
-
+        </div>*@
 
             <div class="form-group">
                 <label asp-for="Input.PhoneNumber"></label>

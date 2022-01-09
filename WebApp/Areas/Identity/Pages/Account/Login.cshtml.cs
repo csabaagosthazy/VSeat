@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DTO;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -86,6 +87,10 @@ namespace WebApp.Areas.Identity.Pages.Account
                     //à revoir
                     //Session["UserID"] = Input.Email;
                     //Session["UserName"] = Input.Email;
+                    String Email = Input.Email;
+                    var FullUser= await _userManager.FindByEmailAsync(Email);
+                    String UserId = FullUser.Id;
+                    HttpContext.Session.SetString("UserID", UserId);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

@@ -20,7 +20,7 @@ using Microsoft.Extensions.Logging;
 namespace WebApp.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class RegisterModel : PageModel
+    public class CourierRegisterModel : PageModel
     {
         private readonly SignInManager<AspNetUser> _signInManager;
         private readonly UserManager<AspNetUser> _userManager;
@@ -28,14 +28,12 @@ namespace WebApp.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ICityManager _cityManager;
 
-        public RegisterModel(
+        public CourierRegisterModel(
             UserManager<AspNetUser> userManager,
             SignInManager<AspNetUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ICityManager cityManager)
-
-
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -74,7 +72,9 @@ namespace WebApp.Areas.Identity.Pages.Account
             [Display(Name = "City")]
             public int CityId { get; set; }
 
-            
+            [Required]
+            [Display(Name ="Working City")]
+            public int WorkingCityId { get; set; }
 
            
             [Display(Name = "Phone number")]
@@ -99,7 +99,6 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-  
             var citiesList = _cityManager.getCities();
             SelectList list = new SelectList(citiesList, "CityId", "Name");
             ViewData["citiesList"] = list;
@@ -118,7 +117,9 @@ namespace WebApp.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 var createdUser = await _userManager.FindByEmailAsync(Input.Email);
                 String UserId = createdUser.Id;
-                var customer = new Customer { LoginId = UserId};
+                var courier = new Courier { LoginId = UserId, WorkingCityId=Input.WorkingCityId };
+
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
