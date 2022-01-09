@@ -27,13 +27,15 @@ namespace WebApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ICityManager _cityManager;
+        private readonly ICustomerManager _customerManager;
 
         public RegisterModel(
             UserManager<AspNetUser> userManager,
             SignInManager<AspNetUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ICityManager cityManager)
+            ICityManager cityManager,
+            ICustomerManager customerManager)
 
 
         {
@@ -42,6 +44,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _cityManager = cityManager;
+            _customerManager = customerManager;
         }
 
         [BindProperty]
@@ -118,7 +121,9 @@ namespace WebApp.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 var createdUser = await _userManager.FindByEmailAsync(Input.Email);
                 String UserId = createdUser.Id;
-                var customer = new Customer { LoginId = UserId};
+                var customer = new Customer { LoginId = UserId, CustomerId =UserId};
+                _customerManager.CreateCustomer(customer);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

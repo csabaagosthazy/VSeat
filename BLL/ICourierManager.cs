@@ -9,5 +9,6 @@ namespace BLL
     {
         Courier GetCourier(string email, string password);
         Courier GetFreeCourierInCity(DateTime deliveryDateTime, int cityId);
+        Courier CreateCourier(Courier courier);
     }
 }

@@ -27,19 +27,22 @@ namespace WebApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ICityManager _cityManager;
+        private readonly ICourierManager _courierManager;
 
         public CourierRegisterModel(
             UserManager<AspNetUser> userManager,
             SignInManager<AspNetUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ICityManager cityManager)
+            ICityManager cityManager,
+            ICourierManager courierManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _cityManager = cityManager;
+            _courierManager = courierManager;
         }
 
         [BindProperty]
@@ -117,7 +120,9 @@ namespace WebApp.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 var createdUser = await _userManager.FindByEmailAsync(Input.Email);
                 String UserId = createdUser.Id;
-                var courier = new Courier { LoginId = UserId, WorkingCityId=Input.WorkingCityId };
+                var courier = new Courier { CourierId = UserId,LoginId = UserId, WorkingCityId=Input.WorkingCityId };
+                
+                _courierManager.CreateCourier(courier);
 
 
                 if (result.Succeeded)

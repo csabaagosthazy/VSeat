@@ -11,5 +11,7 @@ namespace DAL
         int AddOrder(Order order);
         int UpdateOrder(Order order);
         int DeleteOrder(int id);
+        List<Order> GetOrderByCourierId(string courierId);
+        int DeliverOrderById(int orderId);
     }
 }

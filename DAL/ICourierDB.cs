@@ -9,5 +9,6 @@ namespace DAL
     {
         public Courier GetUser(string email, string password);
         public List<Courier> GetCouriers();
+        Courier CreateCourier(Courier courier);
     }
 }

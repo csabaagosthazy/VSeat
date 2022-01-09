@@ -35,7 +35,7 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult Client()
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -45,7 +45,7 @@ namespace VsEatMVC.Controllers
 
         public IActionResult BrowseRestaurants()
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -95,7 +95,7 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult SelectDishes(int id)
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -105,7 +105,7 @@ namespace VsEatMVC.Controllers
         //Restaurant details
         public IActionResult RestaurantDetails (int id)
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -127,7 +127,9 @@ namespace VsEatMVC.Controllers
         // AddToCart  
         public IActionResult AddToCart(int dishId)
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            var test1 = HttpContext.Session.GetString("Id");
+            var test2 = HttpContext.Session.GetString("UserID");
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -139,7 +141,7 @@ namespace VsEatMVC.Controllers
             var restaurantId = dish.RestaurantId;
             //cart is bind to user
             //get from auth method
-            var userId = HttpContext.Session.GetString("UserId");
+            var userId = HttpContext.Session.GetString("UserID");
 
             CartItem item = new CartItem
             {
@@ -235,7 +237,7 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult Cart()
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -254,7 +256,7 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult CreateOrder()
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -331,7 +333,7 @@ namespace VsEatMVC.Controllers
         [HttpPost]
         public IActionResult CreateOrder(OrderDetails orderDetails)
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -384,7 +386,7 @@ namespace VsEatMVC.Controllers
 
         public IActionResult CancelOrder(long orderId)
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -403,7 +405,7 @@ namespace VsEatMVC.Controllers
 
         public IActionResult OrderError(string message)
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
@@ -413,12 +415,12 @@ namespace VsEatMVC.Controllers
 
         public IActionResult Orders()
         {
-            if (HttpContext.Session.GetString("UserId") == null)
+            if (HttpContext.Session.GetString("UserID") == null)
             {
                 return RedirectToAction("Index", "Login");
             }
             //get user id (auth)
-            string userId = HttpContext.Session.GetString("UserId");
+            string userId = HttpContext.Session.GetString("UserID");
             //get active user orders
             List<Order> orders = new List<Order>();
             foreach(Order order in OrderManager.GetOrderByUserId(userId))

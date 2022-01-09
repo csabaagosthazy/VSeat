@@ -1,7 +1,56 @@
-﻿@{
+﻿@model IEnumerable<WebApp.ViewModels.OrderVM>
+@{
     ViewData["Title"] = "Courier Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Courier</h1>
+
 </div>
+<article class="page">
+    <h1>Order list</h1>
+    <hr/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ScheduledDeliveryDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CashPayment)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScheduledDeliveryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CashPayment)
+                </td>
+                <td>
+                    @Html.ActionLink("Delivered", "DeliverOrder", new { id = item.OrderId }) |
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+</article>

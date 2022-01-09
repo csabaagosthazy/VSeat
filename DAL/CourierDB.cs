@@ -112,5 +112,39 @@ namespace DAL
 
             return results;
         }
+
+        public Courier CreateCourier(Courier courier)
+        {
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            //courier.Id = Guid.NewGuid().ToString();
+            
+
+            //Create the Customer with the AspNetUser data
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+                    string query = "Insert into Couriers(CourierId,LoginId, WorkingCityId) values(@LoginId1, @LoginId, @WorkingCityId); SELECT SCOPE_IDENTITY()";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+
+                    cmd.Parameters.AddWithValue("@LoginId", courier.LoginId);                  
+                    cmd.Parameters.AddWithValue("@LoginId1", courier.CourierId);
+                    cmd.Parameters.AddWithValue("@WorkingCityId", courier.WorkingCityId);
+
+                    
+
+                    cn.Open();
+                    courier.CourierId = cmd.ExecuteScalar().ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return courier;
+        }
+
+        
     }
 }

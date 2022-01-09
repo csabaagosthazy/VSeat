@@ -82,5 +82,10 @@ namespace BLL
 
 
         }
+
+        public Courier CreateCourier(Courier courier)
+        {
+            return CourierDb.CreateCourier(courier);
+        }
     }
 }

@@ -55,22 +55,21 @@ namespace DAL
         {
             List<City> results = null;
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            try
+            try {
+
+                using (SqlConnection cn = new SqlConnection(connectionString)) {
+
+
+                    string query = "Select * from Cities";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cn.Open();
+
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
-
-
-                    
-                    cn.Open();
-                    
-                    SqlCommand cmd = new SqlCommand(query, cn);
-                    string query = "Select * from Cities";
-                {
-                using (SqlConnection cn = new SqlConnection(connectionString))
-            {
                     {
-                        {
+
                         while (dr.Read())
+                        {
                             if (results == null)
                                 results = new List<City>();
                             City city = new City();
@@ -82,18 +81,18 @@ namespace DAL
 
                                 city.Name = (string)dr["Name"];
                             if (dr["ZipCode"] != null)
-                                city.ZipCode = (int)dr["ZipCode"];                    
+                                city.ZipCode = (int)dr["ZipCode"];
 
                             results.Add(city);
                         }
-                         
                     }
                 }
-            catch (Exception e)
             }
+            catch (Exception e) { 
+
                 throw e;
-            {
             }
+           
             return results;
         }
     }

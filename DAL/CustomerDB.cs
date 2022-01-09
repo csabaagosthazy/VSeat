@@ -74,50 +74,23 @@ namespace DAL
         public Customer CreateCustomer(Customer customer)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            customer.Id = Guid.NewGuid().ToString();
-            try
-            {
-                using (SqlConnection cn = new SqlConnection(connectionString))
-                {
-                    string query = "Insert into AspNetUsers(Id, FirstName, LastName, Email, Street,StreetNumber, EmailConfirmed, PasswordHash, PhoneNumber, PhoneNumberConfirmed, CreationDate, CityId) values(@Id, @FirstName, @LastName, @Email, @Street, @StreetNumber, @EmailConfirmed @PasswordHash, @PhoneNumber, @PhoneNumberConfirmed @CreationDate, @CityId); SELECT SCOPE_IDENTITY()";
-                    SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.Parameters.AddWithValue("@Id", customer.Id);
-                    cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
-                    cmd.Parameters.AddWithValue("@LastName", customer.LastName);
-                    cmd.Parameters.AddWithValue("@Email", customer.Email);
-                    cmd.Parameters.AddWithValue("@Street", customer.Street);
-                    cmd.Parameters.AddWithValue("@StreetNumber", customer.StreetNumber);
-                    cmd.Parameters.AddWithValue("@EmailConfirmed", customer.EmailConfirmed);
-                    cmd.Parameters.AddWithValue("@PasswordHash", customer.PasswordHash);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
-                    cmd.Parameters.AddWithValue("@PhoneNumberConfirmed", customer.PhoneNumberConfirmed);
-                    cmd.Parameters.AddWithValue("@CreationDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@CityId", customer.CityId);
-
-                    cn.Open();
-
-           
-                }
-               
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            //customer.Id = Guid.NewGuid().ToString();
+ 
             //Create the Customer with the AspNetUser data
             try
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Insert into Customer(LoginId) values(@LoginId); SELECT SCOPE_IDENTITY()";
+                    string query = "Insert into Customers(CustomerId, LoginId) values(@LoginId1, @LoginId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
 
-                    cmd.Parameters.AddWithValue("@LoginId", customer.Id);
+                    cmd.Parameters.AddWithValue("@LoginId", customer.LoginId);
+                    cmd.Parameters.AddWithValue("@LoginId1", customer.CustomerId);
 
-                    customer.CustomerId = cmd.ExecuteScalar().ToString();
+                    
 
                     cn.Open();
+                    customer.CustomerId = cmd.ExecuteScalar().ToString();
                 }
             }
             catch (Exception e)

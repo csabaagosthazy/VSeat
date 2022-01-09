@@ -69,6 +69,8 @@ namespace WebApp
             services.AddScoped<IRestaurantDB, RestaurantDB>();
             services.AddScoped<ICourierManager, CourierManager>();
             services.AddScoped<ICourierDB, CourierDB>();
+            services.AddScoped<ICustomerManager, CustomerManager>();
+            services.AddScoped<ICustomerDB, CustomerDB>();
             services.AddScoped<IDishManager, DishManager>();
             services.AddScoped<IDishDB, DishDB>();
             services.AddScoped<IOrderManager, OrderManager>();

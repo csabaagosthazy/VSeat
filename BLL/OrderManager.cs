@@ -39,9 +39,19 @@ namespace BLL
 
         }
 
+        public List<Order> GetOrderByCourierId(string userId)
+        {      
+            return OrderDb.GetOrderByCourierId(userId);
+        }
+
         public Order GetOrderById(long orderId)
         {
             return OrderDb.GetOrderById(orderId);
+        }
+
+        public int DeliverOrderById(int orderId)
+        {
+            return OrderDb.DeliverOrderById(orderId);
         }
 
         public int CancelOrder(Order order)

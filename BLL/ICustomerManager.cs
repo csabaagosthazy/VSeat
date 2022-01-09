@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BLL
 {
-    interface ICustomerManager
+    public interface ICustomerManager
     {
         Customer CreateCustomer(Customer customer);
         Customer GetUser(string email, string password);
