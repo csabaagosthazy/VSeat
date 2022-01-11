@@ -1,10 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using DTO;
-
-@inject SignInManager<AspNetUser> SignInManager
-@inject UserManager<AspNetUser> UserManager
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,26 +21,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-                            </li>
-                            <li class="nav-item">
-                                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Home", "Home", new { area = "" })">
-                                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -63,7 +43,6 @@
             &copy; 2021 - VsEatMVC -
             <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             <a asp-area="" asp-controller="Home" asp-action="UserGuide">User Guide</a>
-            <a id="courierRegister" asp-area="Identity" asp-page="/Account/CourierRegister">Register as courier</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

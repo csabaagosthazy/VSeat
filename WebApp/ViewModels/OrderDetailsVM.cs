@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class OrderDetails
+    public class OrderDetailsVM
     {
         public long OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
@@ -13,7 +13,7 @@ namespace WebApp.ViewModels
         public decimal TotalPrice { get; set; }
         public bool CashPayment { get; set; }
         public bool IsPaid { get; set; } = false;
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public int RestaurantId { get; set; }
         public List<CartItem> OrderItems { get; set; }
     }

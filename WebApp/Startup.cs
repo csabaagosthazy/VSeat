@@ -1,12 +1,8 @@
 using BLL;
 using DAL;
-using DTO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,9 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApp.Data;
-using WebApp.Services;
-
 
 namespace WebApp
 {
@@ -32,57 +25,26 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
-
-            // Add EF services to the services container.
-            services.AddDbContext<WebAppContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<AspNetUser, IdentityRole>()
-                .AddEntityFrameworkStores<WebAppContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddMvc();
-            //services.AddScoped<ICourierManager, CourierManager>();
             services.AddControllersWithViews();
-
-            services.AddScoped<ICityManager, CityManager>();
-            services.AddScoped<ICityDB, CityDB>();
-            
-            //services.AddTransient<ICityDB, CityDB>();
-
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(10);
-            });
-
-
-            // requires
-            // using Microsoft.AspNetCore.Identity.UI.Services;
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            services.Configure<AuthMessageSenderOptions>(Configuration);
-            
-
-            services.AddRazorPages();
             services.AddScoped<IRestaurantManager, RestaurantManager>();
             services.AddScoped<IRestaurantDB, RestaurantDB>();
-            services.AddScoped<ICourierManager, CourierManager>();
-            services.AddScoped<ICourierDB, CourierDB>();
-            services.AddScoped<ICustomerManager, CustomerManager>();
-            services.AddScoped<ICustomerDB, CustomerDB>();
             services.AddScoped<IDishManager, DishManager>();
             services.AddScoped<IDishDB, DishDB>();
             services.AddScoped<IOrderManager, OrderManager>();
             services.AddScoped<IOrderDB, OrderDB>();
             services.AddScoped<IOrderDetailDB, OrderDetailDB>();
+            services.AddScoped<ICityManager, CityManager>();
+            services.AddScoped<ICityDB, CityDB>();
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IUserDB, UserDB>();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -100,11 +62,8 @@ namespace WebApp
             app.UseSession();
             app.UseAuthorization();
 
-            app.UseAuthentication();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Home}/{id?}");

@@ -27,10 +27,5 @@ namespace BLL
         {
             return RestaurantDB.GetRestaurantById(id);
         }
-
-       public City GetCityById(int cityId)
-        {
-            return CityDb.GetCityById(cityId);
-        }
     }
 }

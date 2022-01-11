@@ -8,10 +8,7 @@ namespace DAL
         Order CreateOrder(Order order);
         List<Order> GetOrders();
         Order GetOrderById(long id);
-        int AddOrder(Order order);
         int UpdateOrder(Order order);
         int DeleteOrder(int id);
-        List<Order> GetOrderByCourierId(string courierId);
-        int DeliverOrderById(int orderId);
     }
 }

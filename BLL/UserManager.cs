@@ -7,31 +7,36 @@ using Microsoft.Extensions.Configuration;
 
 namespace BLL
 {
-    public class CourierManager:ICourierManager
+    public class UserManager:IUserManager
     {
-        private ICourierDB CourierDb { get; }
+        private IUserDB UserDb { get; }
         private IOrderDB OrderDb { get; }
         private IRestaurantDB RestaurantDb { get; }
-        public CourierManager(ICourierDB courierDb, IOrderDB orderDb, IRestaurantDB restaurantDb)
+        public UserManager(IUserDB userDb, IOrderDB orderDb, IRestaurantDB restaurantDb)
         {
-            CourierDb = courierDb;
+            UserDb = userDb;
             OrderDb = orderDb;
             RestaurantDb = restaurantDb;
         }
 
-        public Courier GetCourier(string email, string password)
+        public User GetUserByEmailAndPassword(string email, string password)
         {
-            return CourierDb.GetUser(email, password);
+            return UserDb.GetUserByEmailAndPassword(email, password);
         }
 
-        public Courier GetFreeCourierInCity(DateTime deliveryDateTime, int cityId)
+        public User GetUserById(int userId)
+        {
+            return UserDb.GetUserById(userId);
+        }
+
+        public User GetFreeCourierInCity(DateTime deliveryDateTime, int cityId)
         {
             // get all couriers where working city is the same
-            Courier result = null;
-            var couriers = CourierDb.GetCouriers();
+            User result = null;
+            var couriers = UserDb.GetUsers();
             if(couriers == null ) return result;
 
-            couriers = couriers.FindAll(c => c.WorkingCityId == cityId);
+            couriers = couriers.FindAll(c => c.CityId == cityId && c.Role == "Courier");
             if (couriers == null) return result;
             //get all orders
             //from orders extract restaurant id
@@ -57,9 +62,9 @@ namespace BLL
                 {
                     //count orders assigned to different couriers
                     //if count is less then 5 assign the courier
-                    foreach(Courier courier in couriers)
+                    foreach(User courier in couriers)
                     {
-                        int count = filtered.FindAll(f => f.CourierId.Equals(courier.CourierId)).Count;
+                        int count = filtered.FindAll(f => f.CourierId == courier.CityId).Count;
                         if(count < 5 )
                         {
                             result = courier;
@@ -83,9 +88,9 @@ namespace BLL
 
         }
 
-        public Courier CreateCourier(Courier courier)
+        public User CreateUser(User user)
         {
-            return CourierDb.CreateCourier(courier);
+            return UserDb.CreateUser(user);
         }
     }
 }

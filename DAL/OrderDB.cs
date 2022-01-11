@@ -97,9 +97,9 @@ namespace DAL
                             if (dr["IsCancel"] != null)
                                 order.IsCancel = (bool)dr["IsCancel"];
                             if (dr["CustomerId"] != null)
-                                order.CustomerId = (string)dr["CustomerId"];
+                                order.CustomerId = (int)dr["CustomerId"];
                             if (dr["CourierId"] != null)
-                                order.CourierId = (string)dr["CourierId"];
+                                order.CourierId = (int)dr["CourierId"];
                             if (dr["RestaurantId"] != null)
                                 order.RestaurantId = (int)dr["RestaurantId"];
 
@@ -158,9 +158,9 @@ namespace DAL
                             if (dr["IsCancel"] != null)
                                 order.IsCancel = (bool)dr["IsCancel"];
                             if (dr["CustomerId"] != null)
-                                order.CustomerId = (string)dr["CustomerId"];
+                                order.CustomerId = (int)dr["CustomerId"];
                             if (dr["CourierId"] != null)
-                                order.CourierId = (string)dr["CourierId"];
+                                order.CourierId = (int)dr["CourierId"];
                             if (dr["RestaurantId"] != null)
                                 order.RestaurantId = (int)dr["RestaurantId"];
 
@@ -174,107 +174,6 @@ namespace DAL
             }
 
             return order;
-        }
-
-        public List<Order> GetOrderByCourierId(string courierId)
-        {
-            List<Order> results = null;
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-
-            try
-            {
-                using (SqlConnection cn = new SqlConnection(connectionString))
-                {
-                    string query = "Select * from Orders where CourierId = @courieurId";
-                    SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.Parameters.AddWithValue("@courieurId", courierId);
-
-                    cn.Open();
-
-
-                    using (SqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        while (dr.Read())
-                        {
-                            if (results == null)
-                                results = new List<Order>();
-
-                            Order order = new Order();
-
-                            order.OrderId = (long)dr["OrderId"];
-
-                            if (dr["OrderNumber"] != null)
-                                order.OrderNumber = (long)dr["OrderNumber"];
-
-                            if (dr["OrderDate"] != null)
-                                order.OrderDate = (DateTime)dr["OrderDate"];
-
-                            if (dr["ScheduledDeliveryDate"] != null)
-                                order.ScheduledDeliveryDate = (DateTime)dr["ScheduledDeliveryDate"];
-                            if (dr["TotalPrice"] != null)
-                                order.TotalPrice = (decimal)dr["TotalPrice"];
-                            if (dr["CashPayment"] != null)
-                                order.CashPayment = (bool)dr["CashPayment"];
-                            if (dr["IsPaid"] != null)
-                                order.IsPaid = (bool)dr["IsPaid"];
-                            if (dr["IsCancel"] != null)
-                                order.IsCancel = (bool)dr["IsCancel"];
-                            if (dr["CustomerId"] != null)
-                                order.CustomerId = (string)dr["CustomerId"];
-                            if (dr["CourierId"] != null)
-                                order.CourierId = (string)dr["CourierId"];
-                            if (dr["RestaurantId"] != null)
-                                order.RestaurantId = (int)dr["RestaurantId"];
-
-                            results.Add(order);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
-            return results;
-        }
-
-        public int AddOrder(Order order)
-        {
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-
-            int result = 0;
-            try
-            {
-                using (SqlConnection cn = new SqlConnection(connectionString))
-                {
-                    string query = "Insert Orders (OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice, CashPayment, IsPaid, IsCancel, DeliveryAddressId,  CustomerId, CourierId, RestaurantId ) values (@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @DeliveryAddressId,  @CustomerId, @CourierId. @RestaurantId )";
-                    SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
-                    cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
-                    cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", order.ScheduledDeliveryDate);
-                    cmd.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
-                    cmd.Parameters.AddWithValue("@CashPayment", order.CashPayment);
-                    cmd.Parameters.AddWithValue("@IsPaid", order.IsPaid);
-                    cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel);
-                    cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-                    cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
-                    cmd.Parameters.AddWithValue("@RestaurantId", order.RestaurantId);
-
-
-                    cn.Open();
-                    result = cmd.ExecuteNonQuery();
-                    cn.Close();
-                }
-
-
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return result;
-
         }
 
         public int UpdateOrder(Order order)
@@ -313,35 +212,6 @@ namespace DAL
                 throw e;
             }
             return result;
-        }
-
-        public int DeliverOrderById(int orderId)
-        {
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            int result = 0;
-            try
-            {
-                using (SqlConnection cn = new SqlConnection(connectionString))
-                {
-
-                    string query = "Update Orders SET  ScheduledDeliveryDate = @ScheduledDeliveryDate IsPaid = @IsPaid where OrderId = @OrderId";
-                    SqlCommand cmd = new SqlCommand(query, cn);
-                    cmd.Parameters.AddWithValue("@OrderId", orderId);
-                    cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@IsPaid", 1);
-  
-                    cn.Open();
-                    result = cmd.ExecuteNonQuery();
-
-                }
-
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return result;
-        
         }
         public int DeleteOrder(int id)
         {

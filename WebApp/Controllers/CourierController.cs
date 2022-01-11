@@ -26,11 +26,12 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult Courier()
         {
-            if (HttpContext.Session.GetString("UserID") == null)
+            var userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null || HttpContext.Session.GetString("UserRole") != "Courier")
             {
-                return RedirectToAction("Home", "Home");
+                return RedirectToAction("Home", "Login");
             }
-            var courierOrders = OrderManager.GetOrderByCourierId(HttpContext.Session.GetString("UserID"));
+            var courierOrders = OrderManager.GetOrderByCourierId((int) userId);
             if (courierOrders == null)
             {
                 List<OrderVM> vmOrdersEmpty = new List<OrderVM>();
@@ -67,8 +68,9 @@ namespace VsEatMVC.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
        
-        public IActionResult DeliverOrder(int OrderId)
+        public IActionResult DeliverOrder(int orderId)
         {
+            OrderManager.DeliverOrderById(orderId);
 
             return RedirectToAction(nameof(Courier));
         }

@@ -31,17 +31,28 @@ namespace BLL
 
         }
 
-        public List<Order> GetOrderByUserId(string userId)
+        public List<Order> GetOrderByUserId(int userId)
         {
-            List<Order> allOrders = OrderDb.GetOrders();
-            List<Order> result = allOrders.FindAll(o => o.CustomerId.Equals(userId));
+            List<Order> result = new List<Order>();
+            List<Order> orders = OrderDb.GetOrders();
+            if(orders != null)
+            {
+                result = orders.FindAll(o => o.CustomerId == userId);
+            }
             return result;
 
         }
 
-        public List<Order> GetOrderByCourierId(string userId)
-        {      
-            return OrderDb.GetOrderByCourierId(userId);
+        public List<Order> GetOrderByCourierId(int courierId)
+        {
+            List<Order> result = new List<Order>();
+            List<Order> orders = OrderDb.GetOrders();
+            if (orders != null)
+            {
+                result = orders.FindAll(order => order.CourierId == courierId);
+
+            }
+            return result;
         }
 
         public Order GetOrderById(long orderId)
@@ -51,7 +62,12 @@ namespace BLL
 
         public int DeliverOrderById(int orderId)
         {
-            return OrderDb.DeliverOrderById(orderId);
+            Order order = OrderDb.GetOrderById(orderId);
+
+            order.IsPaid = true;
+            order.EffectiveDeliveryDate = DateTime.Now;
+
+            return OrderDb.UpdateOrder(order);
         }
 
         public int CancelOrder(Order order)

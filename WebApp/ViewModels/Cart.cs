@@ -9,7 +9,7 @@ namespace WebApp.ViewModels
     public class Cart
     {
         [Key]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public int RestaurantId { get; set; }
         public decimal Discount { get; set; } = 0;
         public decimal TotalPrice { get; set; }
