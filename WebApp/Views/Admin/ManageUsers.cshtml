@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<WebApp.ViewModels.UserVM>
+@{
     ViewData["Title"] = "Admin Page";
 }
 
@@ -9,13 +10,89 @@
     <section class="page-section">
         <nav class="sidenav">
             <ul>
-                <li><a asp-area="" asp-controller="Admin" asp-action="ManageUsers">Manage users</a></li>
-                <li><a asp-area="" asp-controller="Admin" asp-action="ManageRestaurants">Manage restaurants</a></li>
+                <li><a asp-area="" asp-controller="Admin" asp-action="Admin">Admin page</a></li>
+                <li><a asp-area="" asp-controller="Admin" asp-action="ManageDatabase">Manage database</a></li>
             </ul>
         </nav>
 
         <article class="page">
-            <h1>Manage users</h1>
+            <h1>User list</h1>
+            <hr />
+            @if (Model != null)
+            {
+                <div style="height: 200px; overflow: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.UserId)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.UserRole)
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserRole)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Delete", "DeleteUser", new { userId = item.UserId })|
+                                </td>
+                                @if (item.UserRole == "Client")
+                                {
+                                    <td>
+                                        @Html.ActionLink("Make courier", "ModifyUser", new { userId = item.UserId, role = "Courier" })|
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Make admin", "ModifyUser", new { userId = item.UserId, role = "Admin" })
+                                    </td>
+                                }
+                                @if (item.UserRole == "Courier")
+                                {
+                                    <td>
+                                        @Html.ActionLink("Make client", "ModifyUser", new { userId = item.UserId, role = "Client" })|
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Make admin", "ModifyUser", new { userId = item.UserId, role = "Admin" })
+                                    </td>
+                                }
+                                @if (item.UserRole == "Admin")
+                                {
+                                    <td>
+                                        @Html.ActionLink("Make client", "ModifyUser", new { userId = item.UserId, role = "Client" })|
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Make courier", "ModifyUser", new { userId = item.UserId, role = "Courier" })
+                                    </td>
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <table class="table">
+                    <tr>
+                        <td colspan="5" align="center">
+                            There are no users in database
+                        </td>
+                    </tr>
+                </table>
+            }
+            <div>
+                <br />
+                @Html.ActionLink("Back", "Courier")
+            </div>
         </article>
     </section>
 </div>

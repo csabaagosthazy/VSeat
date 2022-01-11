@@ -3,54 +3,20 @@
     ViewData["Title"] = "Courier Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Courier</h1>
+<div class="container-fluid h-100">
+    <header class="page-header">
+        <h2>My page</h2>
+    </header>
+    <section class="page-section">
+        <nav class="sidenav">
+            <ul>
+                <li><a asp-area="" asp-controller="Courier" asp-action="Orders">My orders</a></li>
+            </ul>
+        </nav>
 
+        <article class="page">
+            <h2>Welcome @ViewBag.name</h2>
+            <p>Here you can browse orders assigned to you</p>
+        </article>
+    </section>
 </div>
-<article class="page">
-    <h1>Order list</h1>
-    <hr/>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.OrderId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ScheduledDeliveryDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TotalPrice)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CashPayment)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ScheduledDeliveryDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TotalPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CashPayment)
-                </td>
-                <td>
-                    @Html.ActionLink("Delivered", "DeliverOrder", new { id = item.OrderId }) |
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-
-
-
-</article>

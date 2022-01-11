@@ -1,0 +1,124 @@
+﻿@model IEnumerable<WebApp.ViewModels.OrderVM>
+@{
+    ViewData["Title"] = "Courier Page";
+}
+
+<div class="container-fluid h-100">
+    <header class="page-header">
+        <h2>My page</h2>
+    </header>
+    <section class="page-section">
+        <nav class="sidenav">
+            <ul>
+                <li><a asp-area="" asp-controller="Courier" asp-action="Courier">My page</a></li>
+            </ul>
+        </nav>
+        <article class="page">
+            <h1>Order list</h1>
+            <hr />
+            @if (Model != null)
+            {
+                <div style="height: 200px; overflow: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.OrderId)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.ScheduledDeliveryDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.City)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.Street)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.StreetNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.ClientName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.TotalPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.IsPayed)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(Model => Model.CashPayment)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OrderId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ScheduledDeliveryDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.City)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Street)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StreetNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ClientName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                                    </td>
+                                    <td>
+                                        @if (item.IsPayed)
+                                        {
+                                            @string.Format("Yes");
+                                        }
+                                        else
+                                        {
+                                            @string.Format("No");
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.CashPayment)
+                                        {
+                                            @string.Format("Yes");
+                                        }
+                                        else
+                                        {
+                                            @string.Format("No");
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Delivered", "DeliverOrder", new { orderId = item.OrderId })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <table class="table">
+                    <tr>
+                        <td colspan="5" align="center">
+                            There are no active orders at the moment
+                        </td>
+                    </tr>
+                </table>
+            }
+                <div>
+                    <br />
+                    @Html.ActionLink("Back", "Courier")
+                </div>
+        </article>
+        </section>
+    </div>

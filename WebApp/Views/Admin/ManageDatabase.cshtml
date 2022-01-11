@@ -9,13 +9,23 @@
     <section class="page-section">
         <nav class="sidenav">
             <ul>
+                <li><a asp-area="" asp-controller="Admin" asp-action="Admin">Admin page</a></li>
                 <li><a asp-area="" asp-controller="Admin" asp-action="ManageUsers">Manage users</a></li>
-                <li><a asp-area="" asp-controller="Admin" asp-action="ManageRestaurants">Manage restaurants</a></li>
             </ul>
         </nav>
 
         <article class="page">
-            <h1>Manage users</h1>
+            <h1>Manage database</h1>
+            <br />
+            @if(@ViewBag.message != null)
+            {
+                <p>@ViewBag.message</p>
+            }
+            <div>
+                @Html.ActionLink("Reset database", "ResetDatabase")
+                <br />
+                @Html.ActionLink("Back", "Admin")
+            </div>
         </article>
     </section>
 </div>

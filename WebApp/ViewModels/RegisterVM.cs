@@ -15,17 +15,17 @@ namespace WebApp.ViewModels
         [DisplayName("Last name")]
         public string LastName { get; set; }
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
         [DisplayName("City")]
         public int CityId{ get; set; }
-        public IEnumerable<SelectListItem> Cities { get; set; }
         [Required]
         public string Street { get; set; }
         [Required]
         public string StreetNumber { get; set; }
         [Required]
-        [StringLength(int.MaxValue, MinimumLength = 5)]
+        [StringLength(15, MinimumLength = 5)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [DataType(DataType.Password)]

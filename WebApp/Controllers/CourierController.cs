@@ -18,12 +18,17 @@ namespace VsEatMVC.Controllers
         private readonly ILogger<CourierController> _logger;
 
         private IOrderManager OrderManager { get; }
+        private IUserManager UserManager { get; }
+        private ICityManager CityManager { get; }
 
-        public CourierController(ILogger<CourierController> logger, IOrderManager orderManager)
+        public CourierController(ILogger<CourierController> logger, IOrderManager orderManager, IUserManager userManager, ICityManager cityManager)
         {
             _logger = logger;
             OrderManager = orderManager;
+            UserManager = userManager;
+            CityManager = cityManager;
         }
+
         public IActionResult Courier()
         {
             var userId = HttpContext.Session.GetInt32("UserID");
@@ -31,48 +36,67 @@ namespace VsEatMVC.Controllers
             {
                 return RedirectToAction("Home", "Login");
             }
-            var courierOrders = OrderManager.GetOrderByCourierId((int) userId);
-            if (courierOrders == null)
+            return View();
+        }
+        public IActionResult Orders()
+        {
+            var userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null || HttpContext.Session.GetString("UserRole") != "Courier")
             {
-                List<OrderVM> vmOrdersEmpty = new List<OrderVM>();
-                OrderVM vmEmpty = new OrderVM
+                return RedirectToAction("Home", "Login");
+            }
+            List<OrderVM> orders = null;
+            //get courier orders
+            var courierOrders = OrderManager.GetOrdersByCourierId((int) userId);
+
+            if(courierOrders != null)
+            {
+
+                orders = new List<OrderVM>();
+                foreach (DTO.Order dr in courierOrders)
                 {
-                    OrderId = 0,
-                    ScheduledDeliveryDate = DateTime.Now,
-                    TotalPrice = 0,
-                    CashPayment = false
-                };
-                vmOrdersEmpty.Add(vmEmpty);
-                return View();
+                    if(!dr.IsCancel && dr.EffectiveDeliveryDate == null)
+                    {
+                        //get customer details
+                        DTO.User customer = UserManager.GetUserById(dr.CustomerId);
+                        DTO.City city = CityManager.GetCityById(customer.CityId);
+
+                        OrderVM vm = new OrderVM
+                        {
+                            OrderId = (int)dr.OrderId,
+                            ScheduledDeliveryDate = dr.ScheduledDeliveryDate,
+                            City = city.Name,
+                            Street = customer.Street,
+                            StreetNumber = customer.StreetNumber,
+                            ClientName = customer.FirstName + " " + customer.LastName,
+                            TotalPrice = dr.TotalPrice,
+                            IsPayed = dr.IsPaid,
+                            CashPayment = dr.CashPayment                    
+                        };
+                        orders.Add(vm);
+                    }
+
+                } 
+                if(orders.Count == 0)
+                {
+                    return View(null);
+                }
             }
 
-            List<OrderVM> vmOrders = new List<OrderVM>();
-            foreach (DTO.Order dr in courierOrders)
-            {
-                    OrderVM vm = new OrderVM
-                {
-                    OrderId = (int)dr.OrderId,
-                    ScheduledDeliveryDate = dr.ScheduledDeliveryDate,
-                    TotalPrice = dr.TotalPrice,
-                    CashPayment = dr.CashPayment                    
-                };
-                vmOrders.Add(vm);
-
-            }          
-
-            return View(vmOrders);
+            return View(orders);
         }
+        public IActionResult DeliverOrder(int orderId)
+        {
+            OrderManager.DeliverOrderById(orderId);
+
+            return RedirectToAction(nameof(Orders));
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
        
-        public IActionResult DeliverOrder(int orderId)
-        {
-            OrderManager.DeliverOrderById(orderId);
-
-            return RedirectToAction(nameof(Courier));
-        }
     }
 }

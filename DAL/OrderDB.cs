@@ -24,17 +24,18 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "INSERT INTO Orders(OrderNumber, OrderDate, ScheduledDeliveryDate, TotalPrice,CashPayment, IsPaid, IsCancel, CustomerId, CourierId, RestaurantId) VALUES (@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @CustomerId, @CourierId, @RestaurantId); SELECT SCOPE_IDENTITY()";
+                    string query = "INSERT INTO Orders(OrderNumber, OrderDate, ScheduledDeliveryDate, EffectiveDeliveryDate, TotalPrice,CashPayment, IsPaid, IsCancel, CustomerId, CourierId, RestaurantId) VALUES (@OrderNumber, @OrderDate, @ScheduledDeliveryDate, @EffectiveDeliveryDate, @TotalPrice, @CashPayment, @IsPaid, @IsCancel, @CustomerId, @CourierId, @RestaurantId); SELECT SCOPE_IDENTITY()";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
                     cmd.Parameters.AddWithValue("@OrderDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", order.ScheduledDeliveryDate);
+                    cmd.Parameters.AddWithValue("@EffectiveDeliveryDate", order.EffectiveDeliveryDate);
                     cmd.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
-                    cmd.Parameters.AddWithValue("@CashPayment", order.CashPayment);
-                    cmd.Parameters.AddWithValue("@IsPaid", order.IsPaid);
-                    cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel);
-                    cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId.ToString());
+                    cmd.Parameters.AddWithValue("@CashPayment", order.CashPayment ? 1 :0);
+                    cmd.Parameters.AddWithValue("@IsPaid", order.IsPaid ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@IsCancel", order.IsCancel ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
                     cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
                     cmd.Parameters.AddWithValue("@RestaurantId", order.RestaurantId);
 
@@ -71,6 +72,7 @@ namespace DAL
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
+                        
                         while (dr.Read())
                         {
                             if (results == null)
@@ -82,12 +84,12 @@ namespace DAL
 
                             if (dr["OrderNumber"] != null)
                                 order.OrderNumber = (long)dr["OrderNumber"];
-
                             if (dr["OrderDate"] != null)
                                 order.OrderDate = (DateTime)dr["OrderDate"];
-
                             if (dr["ScheduledDeliveryDate"] != null)
                                 order.ScheduledDeliveryDate = (DateTime)dr["ScheduledDeliveryDate"];
+                            if (!dr.IsDBNull("EffectiveDeliveryDate"))
+                                order.EffectiveDeliveryDate = (DateTime)dr["EffectiveDeliveryDate"];
                             if (dr["TotalPrice"] != null)
                                 order.TotalPrice = (decimal)dr["TotalPrice"];
                             if (dr["CashPayment"] != null)
@@ -149,6 +151,8 @@ namespace DAL
 
                             if (dr["ScheduledDeliveryDate"] != null)
                                 order.ScheduledDeliveryDate = (DateTime)dr["ScheduledDeliveryDate"];
+                            if (!dr.IsDBNull("EffectiveDeliveryDate"))
+                                order.EffectiveDeliveryDate = (DateTime)dr["EffectiveDeliveryDate"];
                             if (dr["TotalPrice"] != null)
                                 order.TotalPrice = (decimal)dr["TotalPrice"];
                             if (dr["CashPayment"] != null)
@@ -185,12 +189,13 @@ namespace DAL
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
 
-                    string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, CustomerId = @CustomerId, CourierId = @CourierId, RestaurantId = @RestaurantId where OrderId = @OrderId";
+                    string query = "Update Orders SET OrderNumber = @OrderNumber, OrderDate = @OrderDate, ScheduledDeliveryDate = @ScheduledDeliveryDate, EffectiveDeliveryDate = @EffectiveDeliveryDate, TotalPrice = @TotalPrice , CashPayment = @CashPayment, IsPaid = @IsPaid, IsCancel = @IsCancel, CustomerId = @CustomerId, CourierId = @CourierId, RestaurantId = @RestaurantId where OrderId = @OrderId";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.Parameters.AddWithValue("@OrderId", order.OrderId);
                     cmd.Parameters.AddWithValue("@OrderNumber", order.OrderNumber);
                     cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", order.ScheduledDeliveryDate);
+                    cmd.Parameters.AddWithValue("@EffectiveDeliveryDate", order.EffectiveDeliveryDate);
                     cmd.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
                     cmd.Parameters.AddWithValue("@CashPayment", order.CashPayment ? 1 :0);
                     cmd.Parameters.AddWithValue("@IsPaid", order.IsPaid ? 1 : 0);

@@ -37,6 +37,8 @@ namespace WebApp
             services.AddScoped<ICityDB, CityDB>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserDB, UserDB>();
+            services.AddScoped<IAdminManager, AdminManager>();
+            services.AddScoped<IAdminDB, AdminDB>();
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });

@@ -43,7 +43,7 @@ namespace BLL
 
         }
 
-        public List<Order> GetOrderByCourierId(int courierId)
+        public List<Order> GetOrdersByCourierId(int courierId)
         {
             List<Order> result = new List<Order>();
             List<Order> orders = OrderDb.GetOrders();

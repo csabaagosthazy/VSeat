@@ -18,7 +18,9 @@ namespace BLL
             OrderDb = orderDb;
             RestaurantDb = restaurantDb;
         }
-
+        public List<User> GetUsers(){
+            return UserDb.GetUsers();
+        }
         public User GetUserByEmailAndPassword(string email, string password)
         {
             return UserDb.GetUserByEmailAndPassword(email, password);
@@ -27,6 +29,17 @@ namespace BLL
         public User GetUserById(int userId)
         {
             return UserDb.GetUserById(userId);
+        }
+        public List<string> GetUserEmailList()
+        {
+            List<string> emailList = null;
+            var userList = UserDb.GetUsers();
+            if(userList != null)
+            {
+                emailList = new List<string>();
+                userList.ForEach(user => emailList.Add(user.Email));
+            }
+            return emailList;
         }
 
         public User GetFreeCourierInCity(DateTime deliveryDateTime, int cityId)
@@ -91,6 +104,16 @@ namespace BLL
         public User CreateUser(User user)
         {
             return UserDb.CreateUser(user);
+        }
+
+        public int DeleteUser(int userId)
+        {
+            return UserDb.DeleteUser(userId);
+        }
+
+        public int ModifyUser(User user)
+        {
+            return UserDb.UpdateUser(user);
         }
     }
 }

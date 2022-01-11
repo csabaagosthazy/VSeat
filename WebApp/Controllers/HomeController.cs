@@ -75,9 +75,22 @@ namespace VsEatMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterVM registerVM)
         {
+            List<City> cities = CityManager.GetCities();
+
+            SelectList list = new SelectList(cities, "CityId", "Name");
+            ViewBag.cities = list;
 
             if (ModelState.IsValid)
             {
+                //get users to check duplicate email
+                var emailList = UserManager.GetUserEmailList();
+                if(emailList != null)
+                {
+                    if (emailList.Contains(registerVM.Email)){
+                        ModelState.AddModelError("Email", "Email address already used!");
+                        return View(registerVM);
+                    }
+                }
                 //create user
                 User user = new User
                 {

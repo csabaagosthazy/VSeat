@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BLL;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using VsEatMVC.Models;
+using WebApp.ViewModels;
 
 namespace VsEatMVC.Controllers
 {
@@ -13,9 +12,14 @@ namespace VsEatMVC.Controllers
     {
         private readonly ILogger<AdminController> _logger;
 
-        public AdminController(ILogger<AdminController> logger)
+        private IAdminManager AdminManager { get; }
+        private IUserManager UserManager { get; }
+
+        public AdminController(ILogger<AdminController> logger, IAdminManager adminManager, IUserManager userManager)
         {
             _logger = logger;
+            AdminManager = adminManager;
+            UserManager = userManager;
         }
         public IActionResult Admin()
         {
@@ -23,12 +27,38 @@ namespace VsEatMVC.Controllers
         }
         public IActionResult ManageUsers()
         {
+            List<DTO.User> users = UserManager.GetUsers();
+
+            List<UserVM> userList = new List<UserVM>();
+
+            users.ForEach(user => userList.Add(new UserVM { UserId = user.UserId, UserRole = user.Role }));
+
+            return View(userList);
+        }
+        public IActionResult DeleteUser(int userId)
+        {
+            UserManager.DeleteUser(userId);
+            return RedirectToAction("Admin", "ManageUsers");
+        }
+        public IActionResult ModifyUser(int userId, string role)
+        {
+            DTO.User user = UserManager.GetUserById(userId);
+            user.Role = role;
+
+            UserManager.ModifyUser(user);
+            return RedirectToAction("Admin", "ManageUsers");
+        }
+        public IActionResult ManageDatabase(string result)
+        {
+            
+            ViewBag.message = result;
             return View();
         }
-
-        public IActionResult ManageRestaurants()
+        public IActionResult ResetDatabase()
         {
-            return View();
+            int queryResult = AdminManager.ResetDatabase();
+            string message = queryResult == 1 ? "Database successfully reseted" : "Database reset failed";
+            return RedirectToAction("ManageDatabase", new { result = message});
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
