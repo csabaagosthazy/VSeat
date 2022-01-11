@@ -51,6 +51,7 @@ namespace VsEatMVC.Controllers
                     OrderVM vm = new OrderVM
                 {
                     OrderId = (int)dr.OrderId,
+                    
                     ScheduledDeliveryDate = dr.ScheduledDeliveryDate,
                     TotalPrice = dr.TotalPrice,
                     CashPayment = dr.CashPayment                    
@@ -69,7 +70,7 @@ namespace VsEatMVC.Controllers
        
         public IActionResult DeliverOrder(int OrderId)
         {
-
+            OrderManager.DeliverOrderById(OrderId);
             return RedirectToAction(nameof(Courier));
         }
     }

@@ -185,7 +185,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select * from Orders where CourierId = @courieurId and EffectiveDeliveryDate IS NULL";
+                    string query = "Select * from Orders inner join AspNetUsers on Orders.CustomerId=AspNetUsers.Id where CourierId = @courieurId and EffectiveDeliveryDate IS NULL";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.Parameters.AddWithValue("@courieurId", courierId);
 
@@ -324,10 +324,10 @@ namespace DAL
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
 
-                    string query = "Update Orders SET  ScheduledDeliveryDate = @ScheduledDeliveryDate IsPaid = @IsPaid where OrderId = @OrderId";
+                    string query = "Update Orders SET EffectiveDeliveryDate = @EffectiveDeliveryDate, IsPaid = @IsPaid where OrderId = @OrderId";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.Parameters.AddWithValue("@OrderId", orderId);
-                    cmd.Parameters.AddWithValue("@ScheduledDeliveryDate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@EffectiveDeliveryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@IsPaid", 1);
   
                     cn.Open();
