@@ -122,10 +122,11 @@ namespace WebApp.Areas.Identity.Pages.Account
                 var createdUser = await _userManager.FindByEmailAsync(Input.Email);
                 String UserId = createdUser.Id;
                 var customer = new Customer { LoginId = UserId, CustomerId =UserId};
-                _customerManager.CreateCustomer(customer);
+                
 
                 if (result.Succeeded)
                 {
+                    _customerManager.CreateCustomer(customer);
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -140,15 +141,15 @@ namespace WebApp.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
+                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    //{
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //    return LocalRedirect(returnUrl);
+                    //}
                 }
                 foreach (var error in result.Errors)
                 {

@@ -24,5 +24,10 @@ namespace BLL
         {
             return CustomerDb.GetUser(email, password);
         }
+
+        public Customer GetCustomerById(string userId)
+        {
+            return CustomerDb.GetCustomerById(userId);
+        }
     }
 }

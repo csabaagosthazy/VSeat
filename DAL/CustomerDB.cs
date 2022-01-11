@@ -101,9 +101,60 @@ namespace DAL
             return customer;
         }
 
+        public Customer GetCustomerById(string userId)
+        {
+            Customer customer = null;
 
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(connectionString))
+                {
+                    string query = "Select * from Customers inner join AspNetUsers on Customers.LoginId=AspNetUsers.Id where LoginId = @userId";
+                    SqlCommand cmd = new SqlCommand(query, cn);
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                   
 
+                    cn.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            customer = new Customer();
+
+                            customer.Id = (String)dr["Id"];
+
+                            if (dr["FirstName"] != null)
+                                customer.FirstName = (string)dr["FirstName"];
+
+                            if (dr["LastName"] != null)
+                                customer.LastName = (string)dr["LastName"];
+
+                            if (dr["Email"] != null)
+                                customer.LastName = (string)dr["LastName"];
+
+                            if (dr["Street"] != null)
+                                customer.LastName = (string)dr["LastName"];
+
+                            if (dr["StreetNumber"] != null)
+                                customer.LastName = (string)dr["LastName"];
+
+                            if (dr["PhoneNumber"] != null)
+                                customer.LastName = (string)dr["LastName"];
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return customer;
+        }
     }
 }
 

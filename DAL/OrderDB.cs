@@ -185,7 +185,7 @@ namespace DAL
             {
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    string query = "Select * from Orders where CourierId = @courieurId";
+                    string query = "Select * from Orders where CourierId = @courieurId and EffectiveDeliveryDate IS NULL";
                     SqlCommand cmd = new SqlCommand(query, cn);
                     cmd.Parameters.AddWithValue("@courieurId", courierId);
 

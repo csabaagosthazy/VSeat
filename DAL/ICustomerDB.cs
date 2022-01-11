@@ -9,6 +9,7 @@ namespace DAL
     {
         Customer CreateCustomer(Customer customer);
         Customer GetUser(string email, string password);
+        Customer GetCustomerById(string id);
     }
     
 }

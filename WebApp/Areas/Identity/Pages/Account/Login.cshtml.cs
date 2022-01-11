@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DTO;
 using Microsoft.AspNetCore.Http;
+using BLL;
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -22,14 +23,17 @@ namespace WebApp.Areas.Identity.Pages.Account
         private readonly UserManager<AspNetUser> _userManager;
         private readonly SignInManager<AspNetUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ICustomerManager _customerManager;
 
         public LoginModel(SignInManager<AspNetUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<AspNetUser> userManager)
+            UserManager<AspNetUser> userManager,
+            ICustomerManager customerManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _customerManager = customerManager;
         }
 
         [BindProperty]
@@ -75,7 +79,7 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/Client");
 
             if (ModelState.IsValid)
             {
@@ -92,7 +96,15 @@ namespace WebApp.Areas.Identity.Pages.Account
                     String UserId = FullUser.Id;
                     HttpContext.Session.SetString("UserID", UserId);
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    if(_customerManager.GetCustomerById(UserId)!=null)
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        return LocalRedirect(Url.Content("~/Courier"));
+                    }
+                    
                 }
                 if (result.RequiresTwoFactor)
                 {

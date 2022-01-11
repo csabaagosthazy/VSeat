@@ -28,26 +28,34 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @if (Model == null)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ScheduledDeliveryDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TotalPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CashPayment)
-                </td>
-                <td>
-                    @Html.ActionLink("Delivered", "DeliverOrder", new { id = item.OrderId }) |
-                </td>
-            </tr>
+            <h3>You have no pending orders for delivery</h3>
             }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ScheduledDeliveryDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CashPayment)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delivered", "DeliverOrder", new { id = item.OrderId }) |
+                        </td>
+                    </tr>
+                }
+            }
+
         </tbody>
     </table>
 

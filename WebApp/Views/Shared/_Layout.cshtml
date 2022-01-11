@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using DTO;
+@using Microsoft.Extensions.Logging;
+@using Microsoft.AspNetCore.Http;
 
 @inject SignInManager<AspNetUser> SignInManager
 @inject UserManager<AspNetUser> UserManager
@@ -27,7 +29,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
+                        @if (SignInManager.IsSignedIn(User) && Context.Session.GetString("UserID") != null)
                         {
                             <li class="nav-item">
                                 <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
