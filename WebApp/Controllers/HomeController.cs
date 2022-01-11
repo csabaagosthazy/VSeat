@@ -56,6 +56,11 @@ namespace VsEatMVC.Controllers
             ModelState.AddModelError(string.Empty, "Invalid email or password");
             return View(loginVM);
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Home", "Home");
+        }
 
         public IActionResult Register()
         {

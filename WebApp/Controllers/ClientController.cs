@@ -431,6 +431,7 @@ namespace VsEatMVC.Controllers
             var userOrders = OrderManager.GetOrderByUserId((int)userId);
             if (userOrders != null)
             {
+                orders = new List<Order>();
                 foreach(Order order in userOrders)
                 {
                     if (!order.IsCancel && order.EffectiveDeliveryDate == null) orders.Add(order);
